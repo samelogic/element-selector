@@ -11,5 +11,8 @@ document.getElementById('toggle-select').addEventListener('click', function () {
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if(request.action === "selectedElement") {
     document.getElementById('selected-path').innerText = request.path;
+  } else if(request.action === "toggleSelect") {
+    selecting = request.selecting;
+    document.getElementById('toggle-select').innerText = selecting ? 'Stop Selecting' : 'Start Selecting';
   }
 });
