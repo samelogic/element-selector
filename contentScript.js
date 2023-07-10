@@ -1,4 +1,4 @@
-let selecting = false;
+let selecting = true;
 let currentElement = null;
 
 let style = document.createElement('style');
@@ -36,6 +36,29 @@ document.body.appendChild(elementSelectorWindow);
 // create a close button for our "window"
 let closeButton = document.createElement('button');
 closeButton.innerText = 'Close';
+closeButton.style.backgroundColor = '#f44336'; // Red
+closeButton.style.color = 'white'; // White text
+closeButton.style.border = 'none'; // No border
+closeButton.style.padding = '15px 32px'; // Y-padding of 15px, X-padding of 32px
+closeButton.style.textAlign = 'center'; // Centered text
+closeButton.style.textDecoration = 'none'; // No underline
+closeButton.style.display = 'inline-block';
+closeButton.style.fontSize = '16px';
+closeButton.style.margin = '4px 2px';
+closeButton.style.cursor = 'pointer'; // Mouse cursor changes when hovering
+closeButton.style.borderRadius = '4px'; // Rounded corners
+closeButton.style.width = '20%'; // Make it full width
+
+// Change color on hover
+closeButton.onmouseover = function() {
+  closeButton.style.backgroundColor = '#da190b';
+}
+
+// Reset color when not hovering
+closeButton.onmouseout = function() {
+  closeButton.style.backgroundColor = '#f44336';
+}
+
 closeButton.addEventListener('click', function() {
   // stop selecting and hide the "window"
   selecting = false;
