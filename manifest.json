@@ -1,13 +1,15 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "CSS Path Selector",
   "version": "1.0",
   "description": "Get CSS Path of any element",
   "permissions": ["activeTab", "clipboardWrite"],
 
-  "browser_action": {
+  "action": {
     "default_popup": "popup.html",
-    "default_icon": "icon.png"
+    "default_title": "Open the popup",
+    "default_icon": "icon.png",
+    "default_width": 200
   },
   "content_scripts": [
     {
