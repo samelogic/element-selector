@@ -1,6 +1,8 @@
 let selecting = false;
 
-document.getElementById('toggle-select').addEventListener('click', function () {
+let toggleButton = document.getElementById('toggle-select');
+
+toggleButton.addEventListener('click', function () {
   selecting = !selecting;
   this.innerText = selecting ? 'Stop Selecting' : 'Start Selecting';
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
@@ -13,6 +15,11 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     document.getElementById('selected-path').innerText = request.path;
   } else if(request.action === "toggleSelect") {
     selecting = request.selecting;
-    document.getElementById('toggle-select').innerText = selecting ? 'Stop Selecting' : 'Start Selecting';
+    toggleButton.innerText = selecting ? 'Stop Selecting' : 'Start Selecting';
   }
+});
+
+// Auto-click the "Start Selecting" button when the popup opens
+window.addEventListener('DOMContentLoaded', (event) => {
+    toggleButton.click();
 });
