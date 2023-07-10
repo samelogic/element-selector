@@ -2,11 +2,12 @@ let selecting = false;
 let currentElement = null;
 
 let style = document.createElement('style');
-style.innerText = `
+style.innerHTML = `
   #element-selector-window * {
     all: initial;
   }
   #element-selector-window {
+     width: 300px;
     all: initial;
     display: none;
     position: fixed;
@@ -16,9 +17,34 @@ style.innerText = `
     background-color: white;
     border: 1px solid black;
     z-index: 999999999;
+    position: relative;
+    border-radius: 4px;  // adjust to your preference
+    overflow: hidden;  // clip the border gradient to match border radius
+   
   }
+
+#pathDisplay {
+    font-family: Arial, sans-serif;
+    padding: 10px;
+    background-color: #cecece;
+    float: left;
+    border-radius: 5px;
+    margin-bottom: 7px;
+    border: 3px solid #dfdfdf;
+    width: 420px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+#copyButton {
+    float: left;
+    width: 300px;
+}
+
 `;
 document.head.appendChild(style);
+
+
 
 // create a new div for our "window"
 let elementSelectorWindow = document.createElement('div');
@@ -28,54 +54,16 @@ elementSelectorWindow.style.position = 'fixed';
 elementSelectorWindow.style.top = '20px';
 elementSelectorWindow.style.right = '20px';
 elementSelectorWindow.style.padding = '15px';
-elementSelectorWindow.style.backgroundColor = 'white';
-elementSelectorWindow.style.border = '1px solid black';
-elementSelectorWindow.style.borderRadius = '6px';
-elementSelectorWindow.style.color = '#000000';
 elementSelectorWindow.style.zIndex = 999999999;  // ensure it's on top
+elementSelectorWindow.style.width = '450px';
 document.body.appendChild(elementSelectorWindow);
 
-// create a close button for our "window"
-let closeButton = document.createElement('button');
-closeButton.innerText = 'x';
-closeButton.style.backgroundColor = '#f44336'; // Red
-closeButton.style.color = 'white'; // White text
-closeButton.style.border = 'none'; // No border
-closeButton.style.padding = '15px 15px'; // Y-padding of 15px, X-padding of 32px
-closeButton.style.textAlign = 'center'; // Centered text
-closeButton.style.textDecoration = 'none'; // No underline
-closeButton.style.display = 'inline-block';
-closeButton.style.fontSize = '16px';
-closeButton.style.margin = '4px 4px';
-closeButton.style.cursor = 'pointer'; // Mouse cursor changes when hovering
-closeButton.style.borderRadius = '80px'; // Rounded corners
-closeButton.style.width = '10px';
 
-// Change color on hover
-closeButton.onmouseover = function() {
-  closeButton.style.backgroundColor = '#da190b';
-}
-
-// Reset color when not hovering
-closeButton.onmouseout = function() {
-  closeButton.style.backgroundColor = '#f44336';
-}
-
-closeButton.addEventListener('click', function() {
-  // stop selecting and hide the "window"
-  selecting = false;
-  if (currentElement) {
-    currentElement.style.outline = '';
-    currentElement = null;
-  }
-  elementSelectorWindow.style.display = 'none';
-});
-elementSelectorWindow.appendChild(closeButton);
 
 // create a p element for displaying the CSS path
 let pathDisplay = document.createElement('p');
 elementSelectorWindow.appendChild(pathDisplay);
-
+pathDisplay.id = 'pathDisplay';
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if(request.action === "toggleSelect") {
     selecting = request.selecting;
@@ -89,7 +77,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 // copy css path
 let copyButton = document.createElement('button');
 copyButton.innerText = 'Copy to Clipboard';
-
+copyButton.id = 'copyButton';
 copyButton.style.backgroundColor = '#4CAF50'; // Green
 copyButton.style.color = 'white'; // White text
 copyButton.style.border = 'none'; // No border
@@ -101,7 +89,6 @@ copyButton.style.fontSize = '16px';
 copyButton.style.margin = '4px 2px';
 copyButton.style.cursor = 'pointer'; // Mouse cursor changes when hovering
 copyButton.style.borderRadius = '4px'; // Rounded corners
-copyButton.style.width = '50%';
 
 // Change color on hover
 copyButton.onmouseover = function() {
@@ -125,6 +112,43 @@ copyButton.addEventListener('click', async function() {
 elementSelectorWindow.appendChild(copyButton);
 
 
+// create a close button for our "window"
+let closeButton = document.createElement('button');
+closeButton.innerText = 'Close';  // We'll use an image as the button icon
+closeButton.id = 'closeButton';  // Add a CSS id for further modification
+closeButton.style.backgroundColor = '#f44336'; // Red
+closeButton.style.border = 'none'; // No border
+closeButton.style.width = '30px';  // Adjust as needed
+closeButton.style.height = '30px';  // Adjust as needed
+closeButton.style.borderRadius = '4px';  // Make it a perfect circle
+closeButton.style.cursor = 'pointer'; // Mouse cursor changes when hovering
+closeButton.style.backgroundImage = 'url("close-icon.png")';  // Set the image as the background
+closeButton.style.backgroundSize = 'contain';  // Ensure the image fits within the button
+closeButton.style.backgroundRepeat = 'no-repeat';  // Don't repeat the background image
+closeButton.style.backgroundPosition = 'center';  // Center the background image
+
+elementSelectorWindow.appendChild(closeButton);
+
+// Change color on hover
+closeButton.onmouseover = function() {
+  closeButton.style.backgroundColor = '#da190b';
+}
+
+// Reset color when not hovering
+closeButton.onmouseout = function() {
+  closeButton.style.backgroundColor = '#f44336';
+}
+
+closeButton.addEventListener('click', function() {
+  // stop selecting and hide the "window"
+  selecting = false;
+  if (currentElement) {
+    currentElement.style.outline = '';
+    currentElement = null;
+  }
+  elementSelectorWindow.style.display = 'none';
+});
+elementSelectorWindow.appendChild(closeButton);
 
 
 document.addEventListener('click', function (event) {

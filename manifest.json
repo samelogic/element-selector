@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "CSS Path Selector",
-  "version": "1.0",
-  "description": "Get CSS Path of any element",
+  "version": "0.1",
+  "description": "Get CSS Path of any element.",
   "permissions": ["activeTab", "clipboardWrite"],
 
   "action": {
