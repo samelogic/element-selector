@@ -61,6 +61,22 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   }
 });
 
+// copy css path
+let copyButton = document.createElement('button');
+copyButton.innerText = 'Copy to Clipboard';
+elementSelectorWindow.appendChild(copyButton);
+
+copyButton.addEventListener('click', async function() {
+    try {
+        await navigator.clipboard.writeText(pathDisplay.innerText);
+        alert('CSS Path copied to clipboard!');
+    } catch (err) {
+        console.error('Failed to copy text: ', err);
+    }
+});
+
+
+
 document.addEventListener('click', function (event) {
   if(!selecting) return;
 
