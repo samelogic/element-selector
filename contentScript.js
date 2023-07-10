@@ -25,12 +25,13 @@ let elementSelectorWindow = document.createElement('div');
 elementSelectorWindow.id = 'element-selector-window';
 elementSelectorWindow.style.display = 'none';  // start hidden
 elementSelectorWindow.style.position = 'fixed';
-elementSelectorWindow.style.top = '10px';
-elementSelectorWindow.style.right = '10px';
-elementSelectorWindow.style.padding = '10px';
+elementSelectorWindow.style.top = '20px';
+elementSelectorWindow.style.right = '20px';
+elementSelectorWindow.style.padding = '15px';
 elementSelectorWindow.style.backgroundColor = 'white';
 elementSelectorWindow.style.border = '1px solid black';
 elementSelectorWindow.style.borderRadius = '6px';
+elementSelectorWindow.style.color = '#000000';
 elementSelectorWindow.style.zIndex = 999999999;  // ensure it's on top
 document.body.appendChild(elementSelectorWindow);
 
