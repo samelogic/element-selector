@@ -59,7 +59,40 @@ style.innerHTML = `
 `;
 document.head.appendChild(style);
 
+// toast notification
+function createToast(message) {
+    const toast = document.createElement('div');
+    toast.style.position = 'fixed';
+    toast.style.top = '270px';
+    toast.style.right = '25px';
+    toast.style.backgroundColor = '#8545CF';
+    toast.style.color = 'white';
+    toast.style.padding = '10px';
+    toast.style.borderRadius = '5px';
+    toast.style.marginTop = '10px';
+    toast.style.zIndex = '9999999999';
+    toast.style.fontFamily = 'Arial, sans-serif';
+    toast.style.fontSize = '14px';
+    toast.style.opacity = '0';  // make the toast invisible initially
+    toast.style.transition = 'opacity 1s ease-in-out';  // add the transition
+    toast.innerText = message;
+    document.body.appendChild(toast);
 
+    // make the toast visible after adding it to the body
+    setTimeout(() => {
+        toast.style.opacity = '1';
+    }, 0);
+
+    // start the fade out process after 2 seconds
+    setTimeout(() => {
+        toast.style.opacity = '0';
+    }, 2000);
+
+    // remove the toast after 3 seconds (allowing 1 second for the fade out)
+    setTimeout(() => {
+        toast.remove();
+    }, 3000);
+}
 
 // create a new div for our "window"
 let elementSelectorWindow = document.createElement('div');
@@ -75,7 +108,7 @@ document.body.appendChild(elementSelectorWindow);
 
 // create a h3 title for our "window"
 let title = document.createElement('h3');
-title.innerText = 'Path Copied!';
+title.innerText = 'Path Selected!';
 title.style.color = 'rgb(107 87 153)';
 title.style.width = '100%';
 title.style.float = 'left';
@@ -144,7 +177,7 @@ copyButton.onmouseout = function() {
 copyButton.addEventListener('click', async function() {
     try {
         await navigator.clipboard.writeText(pathDisplay.innerText);
-        alert('CSS Path copied to clipboard!');
+        createToast('CSS Path copied to clipboard!'); // Create toast notification instead of alert
     } catch (err) {
         console.error('Failed to copy text: ', err);
     }
