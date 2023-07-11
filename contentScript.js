@@ -15,30 +15,45 @@ style.innerHTML = `
     right: 10px;
     padding: 10px;
     background-color: white;
-    border: 1px solid black;
+    border: 1px solid #8545CF;
     z-index: 999999999;
     position: relative;
-    border-radius: 4px;  // adjust to your preference
+    border-radius: 8px;  // adjust to your preference
     overflow: hidden;  // clip the border gradient to match border radius
    
   }
 
 #pathDisplay {
-    font-family: Arial, sans-serif;
+ font-family: monospace;
     padding: 10px;
     background-color: #cecece;
     float: left;
     border-radius: 5px;
-    margin-bottom: 7px;
+    margin-bottom: 4px;
     border: 3px solid #dfdfdf;
     width: 420px;
     word-wrap: break-word;
     overflow-wrap: break-word;
+    font-size: 14px;
+    color: #393939;
+}
 }
 
 #copyButton {
+    font-family: Arial, sans-serif;
     float: left;
-    width: 300px;
+    font-weight: bold;
+}
+
+#closeButton {
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    color: #ffffff;
+    float: left;
+    width: 74px;
+    padding: 15px 0px;
+    text-align: center;
+    
 }
 
 `;
@@ -58,7 +73,28 @@ elementSelectorWindow.style.zIndex = 999999999;  // ensure it's on top
 elementSelectorWindow.style.width = '450px';
 document.body.appendChild(elementSelectorWindow);
 
+// create a h3 title for our "window"
+let title = document.createElement('h3');
+title.innerText = 'Path Copied!';
+title.style.color = 'rgb(107 87 153)';
+title.style.width = '100%';
+title.style.float = 'left';
+title.style.fontFamily = 'Arial, sans-serif';
+title.style.fontWeight = 'bold';
+title.style.fontSize = '17px';
 
+elementSelectorWindow.appendChild(title);
+
+// create a p subtitle for our "window"
+let subtitle = document.createElement('p');
+subtitle.innerText = 'Please copy the path below.';
+subtitle.style.color = 'rgb(135 135 135)';
+subtitle.style.width = '100%';
+subtitle.style.float = 'left';
+subtitle.style.fontFamily = 'Arial, sans-serif';
+subtitle.style.fontSize = '14px';
+subtitle.style.marginBottom = '15px';
+elementSelectorWindow.appendChild(subtitle);
 
 // create a p element for displaying the CSS path
 let pathDisplay = document.createElement('p');
@@ -78,26 +114,31 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 let copyButton = document.createElement('button');
 copyButton.innerText = 'Copy to Clipboard';
 copyButton.id = 'copyButton';
-copyButton.style.backgroundColor = '#4CAF50'; // Green
+copyButton.style.backgroundColor = '#8545CF'; 
 copyButton.style.color = 'white'; // White text
 copyButton.style.border = 'none'; // No border
 copyButton.style.padding = '15px 32px'; // Y-padding of 15px, X-padding of 32px
 copyButton.style.textAlign = 'center'; // Centered text
 copyButton.style.textDecoration = 'none'; // No underline
 copyButton.style.display = 'inline-block';
-copyButton.style.fontSize = '16px';
-copyButton.style.margin = '4px 2px';
+copyButton.style.fontSize = '12px';
+copyButton.style.margin = '0px 2px';
 copyButton.style.cursor = 'pointer'; // Mouse cursor changes when hovering
 copyButton.style.borderRadius = '4px'; // Rounded corners
+copyButton.style.width = '300px';
+copyButton.style.fontFamily = 'Arial, sans-serif';
+copyButton.style.float = 'left';
+copyButton.style.fontWeight = 'bold';
+
 
 // Change color on hover
 copyButton.onmouseover = function() {
-  copyButton.style.backgroundColor = '#45a049';
+  copyButton.style.backgroundColor = '#450d85';
 }
 
 // Reset color when not hovering
 copyButton.onmouseout = function() {
-  copyButton.style.backgroundColor = '#4CAF50';
+  copyButton.style.backgroundColor = '#8545CF';
 }
 
 copyButton.addEventListener('click', async function() {
@@ -118,14 +159,15 @@ closeButton.innerText = 'Close';  // We'll use an image as the button icon
 closeButton.id = 'closeButton';  // Add a CSS id for further modification
 closeButton.style.backgroundColor = '#f44336'; // Red
 closeButton.style.border = 'none'; // No border
-closeButton.style.width = '30px';  // Adjust as needed
-closeButton.style.height = '30px';  // Adjust as needed
 closeButton.style.borderRadius = '4px';  // Make it a perfect circle
 closeButton.style.cursor = 'pointer'; // Mouse cursor changes when hovering
 closeButton.style.backgroundImage = 'url("close-icon.png")';  // Set the image as the background
 closeButton.style.backgroundSize = 'contain';  // Ensure the image fits within the button
 closeButton.style.backgroundRepeat = 'no-repeat';  // Don't repeat the background image
 closeButton.style.backgroundPosition = 'center';  // Center the background image
+closeButton.style.fontSize = '12px';
+closeButton.style.margin = '0px 2px';
+closeButton.style.float = 'left';
 
 elementSelectorWindow.appendChild(closeButton);
 
@@ -149,6 +191,18 @@ closeButton.addEventListener('click', function() {
   elementSelectorWindow.style.display = 'none';
 });
 elementSelectorWindow.appendChild(closeButton);
+
+// create a footer for our "window"
+let footer = document.createElement('footer');
+footer.innerHTML = 'Powered by Samelogic &reg;<br>Action Based In-Product Surveys';
+footer.style.marginTop = '14px';
+footer.style.marginLeft = '3px';
+footer.style.fontSize = '10px';
+footer.style.color = 'rgba(55, 53, 47, 0.7)';
+footer.style.fontFamily = 'Arial, sans-serif';
+footer.style.float = 'left';
+elementSelectorWindow.appendChild(footer);
+
 
 
 document.addEventListener('click', function (event) {
