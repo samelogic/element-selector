@@ -1,62 +1,68 @@
 body {
-    font-family: Arial, sans-serif;
-    padding: 10px;
-    background-color: #f4f4f4;
-    /* border: 1px solid #b97cff; */
+  font-family: Arial, sans-serif;
+  padding: 10px;
+  background-color: #f4f4f4;
+  /* border: 1px solid #b97cff; */
 }
 
 h3 {
-    color: #333;
+  color: #333;
 }
 
 p {
-    color: #666;
+  color: #666;
 }
 
 button {
-    color: #fff;
-    background-color: #8545CF;
-    border: none;
-    padding: 10px 20px;
-    margin: 10px 0;
-    cursor: pointer;
-    border-radius: 3px;
-    transition: background-color 0.3s ease;
-    width: 100%;
+  color: #fff;
+  background-color: #8545cf;
+  border: none;
+  padding: 10px 20px;
+  margin: 10px 0;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: background-color 0.3s ease;
+  width: 100%;
 }
 
 button:hover {
-    background-color: #450d85;
+  background-color: #450d85;
 }
 
 .gradient-border {
-    /* position: relative; */
-    padding: 0px;
-    background: #f4f4f4;
+  /* position: relative; */
+  padding: 0px;
+  background: #f4f4f4;
 }
 
 .gradient-border::before {
-    content: '';
-    position: absolute;
-    /* top: 0px; right: -1px; bottom: -1px; left: -1px; */
-    background: linear-gradient(35deg, rgba(233,84,1,1) 0%, rgba(166,46,180,1) 52%, rgba(93,95,224,1) 100%);
-    z-index: -1;
+  content: "";
+  position: absolute;
+  /* top: 0px; right: -1px; bottom: -1px; left: -1px; */
+  background: linear-gradient(
+    35deg,
+    rgba(233, 84, 1, 1) 0%,
+    rgba(166, 46, 180, 1) 52%,
+    rgba(93, 95, 224, 1) 100%
+  );
+  z-index: -1;
 }
 
-#footer{
-
-    margin-top: auto;
-    font-size: 10px;
-    color: rgba(55, 53, 47, 0.7);
-    fill: rgba(55, 53, 47, 0.7);
-
-
+#toggle-select {
+  font-weight: bold;
+  font-size: 12px;
 }
 
-#footer-base{
-    margin-top: auto;
-    font-size: 10px;
-    color: rgba(55, 53, 47, 0.7);
-    fill: rgba(55, 53, 47, 0.7);
+#footer {
+  margin-top: auto;
+  font-size: 10px;
+  color: rgba(55, 53, 47, 0.7);
+  fill: rgba(55, 53, 47, 0.7);
+}
 
+#footer-base {
+  margin-top: auto;
+  font-size: 10px;
+  color: rgba(55, 53, 47, 0.7);
+  fill: rgba(55, 53, 47, 0.7);
 }
