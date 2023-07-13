@@ -263,11 +263,12 @@ document.addEventListener("mouseover", function (event) {
   // highlight the element
   if (currentElement) {
     currentElement.style.outline = "";
-    //currentElement.style.boxShadow = "";
+    currentElement.style.cursor = ""; // Reset cursor style
   }
   currentElement = event.target;
   currentElement.style.outline = "4px dotted #8545cf";
   currentElement.style.borderRadius = "6px";
+  currentElement.style.cursor = "pointer"; // Change cursor to pointer
 });
 
 document.addEventListener("mouseout", function (event) {
@@ -275,6 +276,7 @@ document.addEventListener("mouseout", function (event) {
 
   // remove highlight
   currentElement.style.outline = "";
+  currentElement.style.cursor = ""; // Reset cursor style
   currentElement = null;
 });
 
