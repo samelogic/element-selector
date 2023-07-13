@@ -40,7 +40,7 @@ Samelogic CSS Path Selector is a powerful Chrome extension designed to help deve
 
 ## Contributing
 
-We love contributions from the community! Please read the [contribution guide](CONTRIBUTING.md) to get started.
+We love contributions from the community! Please read the [Contribution Guide](CONTRIBUTING.md) to get started.
 
 ## Support
 
