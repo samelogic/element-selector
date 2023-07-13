@@ -322,6 +322,8 @@ document.addEventListener("click", function (event) {
   if (!selecting) return;
 
   event.preventDefault();
+  event.stopPropagation();
+  event.stopImmediatePropagation();
 
   let path = getPathTo(event.target);
   chrome.runtime.sendMessage({ action: "selectedElement", path: path });
@@ -330,6 +332,7 @@ document.addEventListener("click", function (event) {
   selecting = false;
   if (currentElement) {
     currentElement.style.outline = "";
+    currentElement.style.cursor = ""; // Reset cursor style
     currentElement = null;
   }
 
