@@ -7,7 +7,7 @@
 
   "action": {
     "default_popup": "popup.html",
-    "default_title": "Open the popup",
+    "default_title": "CSS Path Selector from Samelogic",
     "default_icon": "icon.png",
     "default_width": 200
   },
@@ -16,5 +16,10 @@
       "matches": ["<all_urls>"],
       "js": ["contentScript.js"]
     }
-  ]
+  ],
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  }
 }
