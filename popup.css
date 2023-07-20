@@ -53,6 +53,12 @@ button:hover {
   font-size: 12px;
 }
 
+#advisory {
+      background-color: #e2e2e2;
+        border-radius: 60px;
+        padding: 8px 18px;
+}
+
 #footer {
   margin-top: auto;
   font-size: 10px;
