@@ -1,13 +1,13 @@
 {
   "manifest_version": 3,
-  "name": "CSS Path Selector",
-  "version": "0.1",
-  "description": "Get CSS Path of any element.",
+  "name": "CSS Path Selector by Samelogic",
+  "version": "1.0",
+  "description": "The CSS Path Selector is designed to help designers, developers, and researchers easily select and copy CSS paths for web elements.",
   "permissions": ["activeTab", "clipboardWrite"],
 
   "action": {
     "default_popup": "popup.html",
-    "default_title": "CSS Path Selector from Samelogic",
+    "default_title": "CSS Path Selector by Samelogic",
     "default_icon": "icon.png",
     "default_width": 200
   },
