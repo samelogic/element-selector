@@ -56,7 +56,18 @@ button:hover {
 #advisory {
       background-color: #e2e2e2;
         border-radius: 60px;
-        padding: 8px 18px;
+        padding: 8px 10px;
+        font-size: x-small;
+        color: #9a6a97;
+        cursor: pointer;
+}
+
+#advisory img {
+    height: 1.5em;
+    width: 1.5em;
+    vertical-align: middle;
+    margin-right: 0.5em;
+    opacity: 0.8;
 }
 
 #footer {
