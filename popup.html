@@ -1,28 +1,23 @@
 <!DOCTYPE html>
-<html class="gradient-border" style="
-    width: 280px;
-">
+<html class="gradient-border" style="width: 280px;">
 
 <head>
     <title>Select an Element</title>
-    <link rel="stylesheet" type="text/css" href="popup.css">
+    <link href="popup.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
     <img src="/chrome-plugin-logo.svg" />
     <h3>Select An Element</h3>
     <p>Select the element you want to attach an action to.</p>
-    <p id="advisory"><i>[i]</i> If elements aren't being highlighted reload the page</p>
+    <p id="advisory"><img src="info.svg" />Reload if elements aren't highlighted.</p>
     <button id="toggle-select">Start Selecting</button>
     <div id="footer">Powered by Samelogic &reg;
-    <div id="footer-base">
-    Action Based In-Product Surveys
+        <div id="footer-base">
+            Action Based In-Product Surveys
+        </div>
+        <script src="popup.js"></script>
     </div>
-    
-
-    <script src="popup.js"></script>
 </body>
 
 </html>
-
-    
