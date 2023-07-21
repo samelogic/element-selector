@@ -266,7 +266,7 @@ document.addEventListener("mouseover", function (event) {
     currentElement.style.cursor = ""; // Reset cursor style
   }
   currentElement = event.target;
-  currentElement.style.outline = "4px dotted #8545cf";
+  currentElement.style.outline = "4px dashed #8545cf";
   currentElement.style.borderRadius = "6px";
   currentElement.style.cursor = "pointer"; // Change cursor to pointer
 });
