@@ -1,25 +1,46 @@
 let selecting = false;
 
-let toggleButton = document.getElementById('toggle-select');
+let toggleButton = document.getElementById("toggle-select");
 
-toggleButton.addEventListener('click', function () {
+toggleButton.addEventListener("click", function () {
   selecting = !selecting;
-  this.innerText = selecting ? 'Stop Selecting' : 'Start Selecting';
+  this.innerText = selecting ? "Stop Selecting" : "Start Selecting";
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    chrome.tabs.sendMessage(tabs[0].id, { action: "toggleSelect", selecting: selecting });
+    chrome.tabs.sendMessage(tabs[0].id, {
+      action: "toggleSelect",
+      selecting: selecting,
+    });
   });
 });
 
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-  if(request.action === "selectedElement") {
-    document.getElementById('selected-path').innerText = request.path;
-  } else if(request.action === "toggleSelect") {
-    selecting = request.selecting;
-    toggleButton.innerText = selecting ? 'Stop Selecting' : 'Start Selecting';
-  }
+chrome.runtime.sendMessage({ cmd: "read_file" }, function (response) {
+  let toggleButton = document.getElementById("toggle-select");
+  let selecting = false;
+  toggleButton.onclick = function () {
+    selecting = !selecting;
+    toggleButton.innerText = selecting ? "Stop Selecting" : "Start Selecting";
+
+    // change the button color
+    if (selecting) {
+      toggleButton.style.backgroundColor = "#cd004d";
+    } else {
+      toggleButton.style.backgroundColor = ""; // Reset to default color
+    }
+
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+      chrome.tabs.sendMessage(tabs[0].id, { cmd: "toggle_select_mode" });
+    });
+  };
 });
 
 // Auto-click the "Start Selecting" button when the popup opens
-window.addEventListener('DOMContentLoaded', (event) => {
-    toggleButton.click();
+window.addEventListener("DOMContentLoaded", (event) => {
+  toggleButton.click();
+});
+
+document.getElementById("advisory").addEventListener("click", function () {
+  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+    chrome.tabs.reload(tabs[0].id);
+    window.close();
+  });
 });
