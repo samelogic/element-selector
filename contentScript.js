@@ -189,11 +189,11 @@ elementSelectorWindow.appendChild(copyButton);
 let closeButton = document.createElement("button");
 closeButton.innerText = "Close"; // We'll use an image as the button icon
 closeButton.id = "closeButton"; // Add a CSS id for further modification
-closeButton.style.backgroundColor = "#f44336"; // Red
+closeButton.style.backgroundColor = "#cd004d"; // Red
 closeButton.style.border = "none"; // No border
 closeButton.style.borderRadius = "4px"; // Make it a perfect circle
 closeButton.style.cursor = "pointer"; // Mouse cursor changes when hovering
-closeButton.style.backgroundImage = 'url("close-icon.png")'; // Set the image as the background
+//closeButton.style.backgroundImage = 'url("close-icon.png")'; // Set the image as the background
 closeButton.style.backgroundSize = "contain"; // Ensure the image fits within the button
 closeButton.style.backgroundRepeat = "no-repeat"; // Don't repeat the background image
 closeButton.style.backgroundPosition = "center"; // Center the background image
@@ -210,7 +210,7 @@ closeButton.onmouseover = function () {
 
 // Reset color when not hovering
 closeButton.onmouseout = function () {
-  closeButton.style.backgroundColor = "#f44336";
+  closeButton.style.backgroundColor = "#cd004d";
 };
 
 closeButton.addEventListener("click", function () {
