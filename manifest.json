@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "CSS Path Selector by Samelogic",
-  "version": "1.0",
+  "version": "1.1",
   "description": "The CSS Path Selector is designed to help designers, developers, and researchers easily select and copy CSS paths for web elements.",
   "permissions": ["activeTab", "clipboardWrite"],
 
