@@ -301,7 +301,9 @@ function getPathTo(element) {
     element = node;
     let selector = element.nodeName.toLowerCase();
     if (element.id) {
-      selector += "#" + element.id;
+      // https://stackoverflow.com/a/51396346
+      // selector += "#" + element.id;
+      selector += `[id='${element.id}']`;
       path.unshift(selector);
       break;
     } else {
