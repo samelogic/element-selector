@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 
-Samelogic CSS Path Selector is a powerful Chrome extension designed to help developers and designers easily select and copy CSS paths for web elements. Built by Samelogic, the leading provider of action-based in-product surveys, this open-source tool aims to streamline and simplify the process of web development and design.
+Samelogic CSS Path Selector is a powerful Chrome extension designed to help developers and designers easily select and copy CSS paths for web elements. Built by Samelogic, the leading provider of Smart Intercept Surveys, this open-source tool aims to streamline and simplify the process of web development and design.
 
 ![Product Gif](https://raw.githubusercontent.com/samelogic/assets/85465e3e5054aaa74d6fabfea63f79622952d01b/chrome%20plugin/Samelogic-Path-Selector-Demo-Sped-Up.gif)
 

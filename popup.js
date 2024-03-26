@@ -44,3 +44,9 @@ document.getElementById("advisory").addEventListener("click", function () {
     window.close();
   });
 });
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.message === "check_extension") {
+    sendResponse({ status: "installed" });
+  }
+});
