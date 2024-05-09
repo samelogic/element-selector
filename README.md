@@ -29,7 +29,7 @@ Samelogic CSS Path Selector is a powerful Chrome extension designed to help deve
 2. Navigate to `chrome://extensions` in your Chrome browser.
 3. Enable "Developer Mode".
 4. Click on "Load Unpacked" and select the cloned repository.
-5. The extension should now appear in your Chrome extension bar!
+5. The extension should now appear in your Chrome extension bar.
 
 ## Usage
 
