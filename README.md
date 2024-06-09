@@ -44,7 +44,7 @@ We love contributions from the community! Please read the [Contribution Guide](C
 
 ## Support
 
-If you encounter any problems or have suggestions, please open an issue. We'd be happy to help!
+If you encounter any problems or have suggestions, please message us. We'd be happy to help!
 
 ## License
 
