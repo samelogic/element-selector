@@ -1,13 +1,16 @@
 {
   "manifest_version": 3,
-  "name": "CSS Path Selector by Samelogic",
-  "version": "1.2",
+  "name": "Copy CSS Path by Samelogic",
+  "version": "1.3",
   "description": "The CSS Path Selector is designed to help designers, developers, and researchers easily select and copy CSS paths for web elements.",
+  "background": {
+    "service_worker": "background.js"
+  },
   "permissions": ["activeTab", "clipboardWrite"],
 
   "action": {
     "default_popup": "popup.html",
-    "default_title": "CSS Path Selector by Samelogic",
+    "default_title": "Copy CSS Path by Samelogic",
     "default_icon": "icon.png",
     "default_width": 200
   },
