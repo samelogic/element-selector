@@ -4,7 +4,7 @@ let toggleButton = document.getElementById("toggle-select");
 
 toggleButton.addEventListener("click", function () {
   selecting = !selecting;
-  this.innerText = selecting ? "Stop Selecting" : "Start Selecting";
+  this.innerText = selecting ? "Stop Selecting" : "Select an Element";
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     chrome.tabs.sendMessage(tabs[0].id, {
       action: "toggleSelect",
@@ -18,7 +18,7 @@ chrome.runtime.sendMessage({ cmd: "read_file" }, function (response) {
   let selecting = false;
   toggleButton.onclick = function () {
     selecting = !selecting;
-    toggleButton.innerText = selecting ? "Stop Selecting" : "Start Selecting";
+    toggleButton.innerText = selecting ? "Stop Selecting" : "Select an Element";
 
     // change the button color
     if (selecting) {
@@ -33,10 +33,10 @@ chrome.runtime.sendMessage({ cmd: "read_file" }, function (response) {
   };
 });
 
-// Auto-click the "Start Selecting" button when the popup opens
-window.addEventListener("DOMContentLoaded", (event) => {
-  toggleButton.click();
-});
+// // Auto-click the "Start Selecting" button when the popup opens
+// window.addEventListener("DOMContentLoaded", (event) => {
+//   toggleButton.click();
+// });
 
 document.getElementById("advisory").addEventListener("click", function () {
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
