@@ -39,35 +39,45 @@ button:hover {
   content: "";
   position: absolute;
   /* top: 0px; right: -1px; bottom: -1px; left: -1px; */
-  background: linear-gradient(
-    35deg,
-    rgba(233, 84, 1, 1) 0%,
-    rgba(166, 46, 180, 1) 52%,
-    rgba(93, 95, 224, 1) 100%
-  );
+  background: linear-gradient(35deg,
+      rgba(233, 84, 1, 1) 0%,
+      rgba(166, 46, 180, 1) 52%,
+      rgba(93, 95, 224, 1) 100%);
   z-index: -1;
 }
 
 #toggle-select {
   font-weight: bold;
   font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  /* Space between icon and text */
+}
+
+#toggle-select svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+  /* This ensures the SVG color matches the text color */
 }
 
 #advisory {
-      background-color: #e2e2e2;
-        border-radius: 60px;
-        padding: 8px 10px;
-        font-size: x-small;
-        color: #9a6a97;
-        cursor: pointer;
+  background-color: #e2e2e2;
+  border-radius: 60px;
+  padding: 8px 10px;
+  font-size: x-small;
+  color: #9a6a97;
+  cursor: pointer;
 }
 
 #advisory img {
-    height: 1.5em;
-    width: 1.5em;
-    vertical-align: middle;
-    margin-right: 0.5em;
-    opacity: 0.8;
+  height: 1.5em;
+  width: 1.5em;
+  vertical-align: middle;
+  margin-right: 0.5em;
+  opacity: 0.8;
 }
 
 #footer {
