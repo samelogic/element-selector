@@ -228,8 +228,7 @@ elementSelectorWindow.appendChild(closeButton);
 
 // create a footer for our "window"
 let footer = document.createElement("footer");
-footer.innerHTML =
-  "Powered by Samelogic &reg;<br>Smart Intercept Surveys that Product Teams Love";
+footer.innerHTML = "powered by samelogic &reg;<br>user intent as a service";
 footer.style.marginTop = "14px";
 footer.style.marginLeft = "3px";
 footer.style.fontSize = "10px";
