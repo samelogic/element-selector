@@ -134,11 +134,13 @@ elementSelectorWindow.appendChild(subtitle);
 let pathDisplay = document.createElement("p");
 elementSelectorWindow.appendChild(pathDisplay);
 pathDisplay.id = "pathDisplay";
+
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.action === "toggleSelect") {
     selecting = request.selecting;
     if (!selecting && currentElement) {
       currentElement.style.outline = "";
+      currentElement.style.cursor = "";
       currentElement = null;
     }
   }
