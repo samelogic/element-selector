@@ -237,6 +237,104 @@ footer.style.fontFamily = "Arial, sans-serif";
 footer.style.float = "left";
 elementSelectorWindow.appendChild(footer);
 
+// Create a container for the CTA
+let ctaContainer = document.createElement("div");
+ctaContainer.id = "samelogic-cta-container";
+ctaContainer.style.marginTop = "20px";
+ctaContainer.style.padding = "15px";
+ctaContainer.style.borderRadius = "8px";
+ctaContainer.style.backgroundColor = "#f0e6ff";
+ctaContainer.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.1)";
+ctaContainer.style.transition = "all 0.3s ease";
+ctaContainer.style.clear = "both"; // Ensure it starts on a new line
+ctaContainer.style.width = "calc(100% - 30px)"; // Full width minus padding
+
+// Create the CTA text
+let ctaText = document.createElement("p");
+ctaText.innerText = "Want to measure user intent around this element?";
+ctaText.style.color = "#4a4a4a";
+ctaText.style.fontFamily = "Arial, sans-serif";
+ctaText.style.fontSize = "14px";
+ctaText.style.marginBottom = "10px";
+ctaText.style.marginTop = "0";
+
+// Create the CTA button
+let ctaButton = document.createElement("a");
+ctaButton.href = "https://samelogic.com";
+ctaButton.target = "_blank";
+ctaButton.innerText = "Measure User Intent";
+ctaButton.style.display = "inline-block";
+ctaButton.style.display = "inline-block";
+ctaButton.style.padding = "8px 16px";
+ctaButton.style.backgroundColor = "#8545CF";
+ctaButton.style.color = "white";
+ctaButton.style.textDecoration = "none";
+ctaButton.style.borderRadius = "4px";
+ctaButton.style.fontFamily = "Arial, sans-serif";
+ctaButton.style.fontSize = "12px";
+ctaButton.style.fontWeight = "bold";
+ctaButton.style.transition = "all 0.3s ease";
+
+// Add hover effects
+ctaButton.onmouseover = function () {
+  this.style.backgroundColor = "#6a35a3";
+  this.style.boxShadow = "0 0 10px rgba(133, 69, 207, 0.5)";
+};
+ctaButton.onmouseout = function () {
+  this.style.backgroundColor = "#8545CF";
+  this.style.boxShadow = "none";
+};
+
+// Assemble the CTA
+ctaContainer.appendChild(ctaText);
+ctaContainer.appendChild(ctaButton);
+
+// Add the CTA to the element selector window
+elementSelectorWindow.style.width = "450px"; // Increase width if necessary
+elementSelectorWindow.style.paddingBottom = "15px"; // Add some bottom padding
+
+// Ensure the footer is above the CTA
+footer.style.marginBottom = "10px";
+
+// Adjust the positioning of the elementSelectorWindow
+elementSelectorWindow.style.top = "10px";
+elementSelectorWindow.style.right = "10px";
+
+// Optional: Add a max-height and overflow to the main window if content becomes too long
+elementSelectorWindow.style.maxHeight = "90vh";
+elementSelectorWindow.style.overflowY = "auto";
+
+// Move the CTA container to the end of the elementSelectorWindow
+elementSelectorWindow.appendChild(ctaContainer);
+
+// Add a subtle animation to draw attention
+function pulseAnimation() {
+  ctaContainer.animate(
+    [
+      { transform: "scale(1)" },
+      { transform: "scale(1.03)" },
+      { transform: "scale(1)" },
+    ],
+    {
+      duration: 2000,
+      iterations: 1,
+    }
+  );
+}
+
+// Trigger the animation when the element selector window is displayed
+let observer = new MutationObserver(function (mutations) {
+  mutations.forEach(function (mutation) {
+    if (mutation.type === "attributes" && mutation.attributeName === "style") {
+      if (elementSelectorWindow.style.display === "block") {
+        setTimeout(pulseAnimation, 500);
+      }
+    }
+  });
+});
+
+observer.observe(elementSelectorWindow, { attributes: true });
+
 document.addEventListener("click", function (event) {
   if (!selecting) return;
 
