@@ -10,7 +10,7 @@
 
   "action": {
     "default_popup": "popup.html",
-    "default_title": "Copy CSS Path",
+    "default_title": "Copy CSS Selector by Samelogic",
     "default_icon": "icon.png",
     "default_width": 200
   },
