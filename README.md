@@ -1,4 +1,4 @@
-# CSS Path Selector
+# Copy CSS Selector
 
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 
