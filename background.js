@@ -1,7 +1,7 @@
 chrome.runtime.onInstalled.addListener(function (details) {
   if (details.reason === "install") {
     chrome.tabs.create({
-      url: "https://samelogic.com/csspathselector/onboarding",
+      url: "https://samelogic.com/csspathselector/install",
     });
   }
 
