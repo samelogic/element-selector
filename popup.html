@@ -1,35 +1,59 @@
 <!DOCTYPE html>
-<html class="gradient-border" style="width: 280px;">
+<html>
 
 <head>
-    <title>Select an Element</title>
-    <link href="popup.css" rel="stylesheet" type="text/css" />
+    <title>Samelogic Selector</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            width: 220px;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        #instructions {
+            font-size: 12px;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        #toggle-select,
+        #advisory {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        #toggle-select {
+            background-color: #8545CF;
+            /* Initial color */
+            color: white;
+        }
+
+        #advisory {
+            background-color: #4CAF50;
+            /* Green color */
+            color: white;
+        }
+
+        #toggle-select.active {
+            background-color: #cd004d;
+            /* Active state color */
+        }
+    </style>
 </head>
 
 <body>
-    <img src="/chrome-plugin-logo.svg" />
-    <h3>Select An Element</h3>
-    <p>Select the element you want to attach an action to.</p>
-    <p id="advisory"><img src="info.svg" />Reload if elements aren't highlighted.</p>
-    <button id="toggle-select">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-            class="icon icon-tabler icons-tabler-outline icon-tabler-click">
-            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <path d="M3 12l3 0" />
-            <path d="M12 3l0 3" />
-            <path d="M7.8 7.8l-2.2 -2.2" />
-            <path d="M16.2 7.8l2.2 -2.2" />
-            <path d="M7.8 16.2l-2.2 2.2" />
-            <path d="M12 12l9 3l-4 2l-2 4l-3 -9" />
-        </svg>
-        <span>Select an Element</span>
-    </button>
-    <div id="footer">powered by samelogic &reg;
-        <div id="footer-base">
-            user intent as a service
-        </div>
+    <div id="instructions">
+        Click "Select an Element" to start selecting elements on the page. Press "Escape" or click "Stop Selecting" to
+        cancel.
     </div>
+    <button id="toggle-select">Select an Element</button>
+    <button id="advisory">Advisory</button>
     <script src="popup.js"></script>
 </body>
 
