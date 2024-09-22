@@ -1,66 +1,163 @@
 let selecting = false;
 let currentElement = null;
 
+// Create and append styles
 let style = document.createElement("style");
 style.innerHTML = `
+  /* Overlay Styles */
+  #selection-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.1); /* Slight dimming */
+    z-index: 999999998;
+    display: none;
+    cursor: crosshair; /* Change cursor to crosshair */
+  }
+
+  /* Element Selector Window Styles */
   #element-selector-window * {
     all: initial;
   }
   #element-selector-window {
-     width: 300px;
-    all: initial;
+    width: 350px;
+    background-color: #ffffff;
     display: none;
     position: fixed;
-    top: 10px;
-    right: 10px;
-    padding: 10px;
-    background-color: #f4f4f4;
-    // border: 2px solid #8545CF;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    border: 2px solid #8545CF;
+    border-radius: 8px;
+    box-shadow: 0px 4px 20px rgba(0,0,0,0.2);
     z-index: 999999999;
-    position: relative;
-    border-radius: 8px;  // adjust to your preference
-    overflow: hidden;  // clip the border gradient to match border radius
-    box-shadow: 0px 2px 15px 11px rgba(0,0,0,0.3);
-   
+    font-family: Arial, sans-serif;
   }
 
-#pathDisplay {
- font-family: monospace;
+  #element-selector-window h3 {
+    color: rgb(107, 87, 153);
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  #element-selector-window p {
+    color: rgb(135, 135, 135);
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 14px;
+  }
+
+  #pathDisplay {
+    font-family: monospace;
     padding: 10px;
-    background-color: #cecece;
-    float: left;
-    border-radius: 5px;
-    margin-bottom: 4px;
+    background-color: #f0f0f0;
     border: 3px solid #dfdfdf;
-    width: 420px;
+    border-radius: 5px;
+    width: 100%;
     word-wrap: break-word;
     overflow-wrap: break-word;
     font-size: 14px;
     color: #393939;
-}
-}
+    margin-bottom: 15px;
+  }
 
-#copyButton {
-    font-family: Arial, sans-serif;
-    float: left;
-    font-weight: bold;
-}
-
-#closeButton {
-    font-family: Arial, sans-serif;
-    font-weight: bold;
-    color: #ffffff;
-    float: left;
-    width: 74px;
-    padding: 15px 0px;
+  #copyButton, #cancelButton, #closeButton {
+    background-color: #8545CF;
+    color: white;
+    border: none;
+    padding: 10px 20px;
     text-align: center;
-    
-}
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 5px 0;
+    cursor: pointer;
+    border-radius: 4px;
+    width: 100%;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
 
+  #copyButton:hover, #cancelButton:hover {
+    background-color: #450d85;
+  }
+
+  #closeButton {
+    background-color: #cd004d;
+    margin-top: 10px;
+  }
+
+  #closeButton:hover {
+    background-color: #da190b;
+  }
+
+  footer {
+    margin-top: 14px;
+    text-align: center;
+    font-size: 10px;
+    color: rgba(55, 53, 47, 0.7);
+    font-family: Arial, sans-serif;
+  }
+
+  /* Instructional Text Styles */
+  #instructionText {
+    font-size: 13px;
+    color: #555;
+    text-align: center;
+    margin-bottom: 10px;
+  }
 `;
 document.head.appendChild(style);
 
-// toast notification
+// Create the overlay element
+let selectionOverlay = document.createElement("div");
+selectionOverlay.id = "selection-overlay";
+document.body.appendChild(selectionOverlay);
+
+// Create the element selector window
+let elementSelectorWindow = document.createElement("div");
+elementSelectorWindow.id = "element-selector-window";
+document.body.appendChild(elementSelectorWindow);
+
+// Add content to the selector window
+let title = document.createElement("h3");
+title.innerText = "Path Selected!";
+elementSelectorWindow.appendChild(title);
+
+let instruction = document.createElement("p");
+instruction.id = "instructionText";
+instruction.innerText =
+  "Please copy the path below or cancel if you made a mistake.";
+elementSelectorWindow.appendChild(instruction);
+
+let pathDisplay = document.createElement("p");
+pathDisplay.id = "pathDisplay";
+elementSelectorWindow.appendChild(pathDisplay);
+
+let copyButton = document.createElement("button");
+copyButton.innerText = "Copy to Clipboard";
+copyButton.id = "copyButton";
+elementSelectorWindow.appendChild(copyButton);
+
+let cancelButton = document.createElement("button");
+cancelButton.innerText = "Cancel Selection";
+cancelButton.id = "cancelButton";
+elementSelectorWindow.appendChild(cancelButton);
+
+let closeButton = document.createElement("button");
+closeButton.innerText = "Close";
+closeButton.id = "closeButton";
+elementSelectorWindow.appendChild(closeButton);
+
+let footer = document.createElement("footer");
+footer.innerHTML = "Powered by Samelogic &reg;<br>User Intent as a Service";
+elementSelectorWindow.appendChild(footer);
+
+// Toast notification function
 function createToast(message) {
   const toast = document.createElement("div");
   toast.style.position = "fixed";
@@ -70,277 +167,204 @@ function createToast(message) {
   toast.style.color = "white";
   toast.style.padding = "10px";
   toast.style.borderRadius = "5px";
-  toast.style.marginTop = "10px";
   toast.style.zIndex = "9999999999";
   toast.style.fontFamily = "Arial, sans-serif";
   toast.style.fontSize = "14px";
-  toast.style.opacity = "0"; // make the toast invisible initially
-  toast.style.transition = "opacity 1s ease-in-out"; // add the transition
+  toast.style.opacity = "0";
+  toast.style.transition = "opacity 1s ease-in-out";
   toast.innerText = message;
   document.body.appendChild(toast);
 
-  // make the toast visible after adding it to the body
   setTimeout(() => {
     toast.style.opacity = "1";
   }, 0);
 
-  // start the fade out process after 2 seconds
   setTimeout(() => {
     toast.style.opacity = "0";
   }, 2000);
 
-  // remove the toast after 3 seconds (allowing 1 second for the fade out)
   setTimeout(() => {
     toast.remove();
   }, 3000);
 }
 
-// create a new div for our "window"
-let elementSelectorWindow = document.createElement("div");
-elementSelectorWindow.id = "element-selector-window";
-elementSelectorWindow.style.display = "none"; // start hidden
-elementSelectorWindow.style.position = "fixed";
-elementSelectorWindow.style.top = "20px";
-elementSelectorWindow.style.right = "20px";
-elementSelectorWindow.style.padding = "15px";
-elementSelectorWindow.style.zIndex = 999999999; // ensure it's on top
-elementSelectorWindow.style.width = "450px";
-document.body.appendChild(elementSelectorWindow);
+// Show overlay and change cursor when selection starts
+function showOverlay() {
+  selectionOverlay.style.display = "block";
+  document.body.style.cursor = "crosshair"; // Indicate selection mode
+}
 
-// create a h3 title for our "window"
-let title = document.createElement("h3");
-title.innerText = "Path Selected!";
-title.style.color = "rgb(107 87 153)";
-title.style.width = "100%";
-title.style.float = "left";
-title.style.fontFamily = "Arial, sans-serif";
-title.style.fontWeight = "bold";
-title.style.fontSize = "17px";
+// Hide overlay and revert cursor when selection ends
+function hideOverlay() {
+  selectionOverlay.style.display = "none";
+  document.body.style.cursor = "default"; // Revert cursor
+}
 
-elementSelectorWindow.appendChild(title);
-
-// create a p subtitle for our "window"
-let subtitle = document.createElement("p");
-subtitle.innerText = "Please copy the path below.";
-subtitle.style.color = "rgb(135 135 135)";
-subtitle.style.width = "100%";
-subtitle.style.float = "left";
-subtitle.style.fontFamily = "Arial, sans-serif";
-subtitle.style.fontSize = "14px";
-subtitle.style.marginBottom = "15px";
-elementSelectorWindow.appendChild(subtitle);
-
-// create a p element for displaying the CSS path
-let pathDisplay = document.createElement("p");
-elementSelectorWindow.appendChild(pathDisplay);
-pathDisplay.id = "pathDisplay";
-
+// Listen for messages from the extension
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.action === "toggleSelect") {
     selecting = request.selecting;
-    if (!selecting && currentElement) {
-      currentElement.style.outline = "";
-      currentElement.style.cursor = "";
-      currentElement = null;
+    if (selecting) {
+      showOverlay();
+      elementSelectorWindow.style.display = "none"; // Hide window during selection
+    } else {
+      hideOverlay();
+      if (currentElement) {
+        currentElement.style.outline = "";
+        currentElement.style.cursor = "";
+        currentElement = null;
+      }
+      elementSelectorWindow.style.display = "none";
     }
   }
 });
 
-// copy css path
-let copyButton = document.createElement("button");
-copyButton.innerText = "Copy to Clipboard";
-copyButton.id = "copyButton";
-copyButton.style.backgroundColor = "#8545CF";
-copyButton.style.color = "white"; // White text
-copyButton.style.border = "none"; // No border
-copyButton.style.padding = "15px 32px"; // Y-padding of 15px, X-padding of 32px
-copyButton.style.textAlign = "center"; // Centered text
-copyButton.style.textDecoration = "none"; // No underline
-copyButton.style.display = "inline-block";
-copyButton.style.fontSize = "12px";
-copyButton.style.margin = "0px 2px";
-copyButton.style.cursor = "pointer"; // Mouse cursor changes when hovering
-copyButton.style.borderRadius = "4px"; // Rounded corners
-copyButton.style.width = "300px";
-copyButton.style.fontFamily = "Arial, sans-serif";
-copyButton.style.float = "left";
-copyButton.style.fontWeight = "bold";
-
-// Change color on hover
-copyButton.onmouseover = function () {
-  copyButton.style.backgroundColor = "#450d85";
-};
-
-// Reset color when not hovering
-copyButton.onmouseout = function () {
-  copyButton.style.backgroundColor = "#8545CF";
-};
-
+// Copy to clipboard functionality
 copyButton.addEventListener("click", async function () {
   try {
     await navigator.clipboard.writeText(pathDisplay.innerText);
-    createToast("CSS Path copied to clipboard!"); // Create toast notification instead of alert
+    createToast("CSS Path copied to clipboard!");
+    elementSelectorWindow.style.display = "none"; // Hide window after copying
   } catch (err) {
     console.error("Failed to copy text: ", err);
+    createToast("Failed to copy CSS Path.");
   }
 });
 
-elementSelectorWindow.appendChild(copyButton);
-
-// create a close button for our "window"
-let closeButton = document.createElement("button");
-closeButton.innerText = "Close"; // We'll use an image as the button icon
-closeButton.id = "closeButton"; // Add a CSS id for further modification
-closeButton.style.backgroundColor = "#cd004d"; // Red
-closeButton.style.border = "none"; // No border
-closeButton.style.borderRadius = "4px"; // Make it a perfect circle
-closeButton.style.cursor = "pointer"; // Mouse cursor changes when hovering
-//closeButton.style.backgroundImage = 'url("close-icon.png")'; // Set the image as the background
-closeButton.style.backgroundSize = "contain"; // Ensure the image fits within the button
-closeButton.style.backgroundRepeat = "no-repeat"; // Don't repeat the background image
-closeButton.style.backgroundPosition = "center"; // Center the background image
-closeButton.style.fontSize = "12px";
-closeButton.style.margin = "0px 2px";
-closeButton.style.float = "left";
-
-elementSelectorWindow.appendChild(closeButton);
-
-// Change color on hover
-closeButton.onmouseover = function () {
-  closeButton.style.backgroundColor = "#da190b";
-};
-
-// Reset color when not hovering
-closeButton.onmouseout = function () {
-  closeButton.style.backgroundColor = "#cd004d";
-};
-
-closeButton.addEventListener("click", function () {
-  // stop selecting and hide the "window"
+// Cancel selection functionality
+cancelButton.addEventListener("click", function () {
   selecting = false;
+  hideOverlay();
   if (currentElement) {
     currentElement.style.outline = "";
+    currentElement.style.cursor = "";
     currentElement = null;
   }
   elementSelectorWindow.style.display = "none";
-});
-elementSelectorWindow.appendChild(closeButton);
-
-// create a footer for our "window"
-let footer = document.createElement("footer");
-footer.innerHTML = "powered by samelogic &reg;<br>user intent as a service";
-footer.style.marginTop = "14px";
-footer.style.marginLeft = "3px";
-footer.style.fontSize = "10px";
-footer.style.color = "rgba(55, 53, 47, 0.7)";
-footer.style.fontFamily = "Arial, sans-serif";
-footer.style.float = "left";
-elementSelectorWindow.appendChild(footer);
-
-document.addEventListener("click", function (event) {
-  if (!selecting) return;
-
-  event.preventDefault();
-
-  let path = getPathTo(event.target);
-  pathDisplay.innerText = path; // display the CSS path in our "window"
-
-  // stop the selection process
-  selecting = false;
-  if (currentElement) {
-    currentElement.style.outline = "";
-    currentElement = null;
-  }
-
-  // show our "window"
-  elementSelectorWindow.style.display = "block";
-
-  return false;
+  chrome.runtime.sendMessage({ action: "toggleSelect", selecting: selecting });
 });
 
+// Close button functionality
+closeButton.addEventListener("click", function () {
+  // Close the selection window without affecting the selection state
+  elementSelectorWindow.style.display = "none";
+});
+
+// Highlight elements on hover
 document.addEventListener("mouseover", function (event) {
   if (!selecting) return;
 
-  // highlight the element
   if (currentElement) {
     currentElement.style.outline = "";
-    currentElement.style.cursor = ""; // Reset cursor style
+    currentElement.style.cursor = "";
   }
   currentElement = event.target;
-  currentElement.style.outline = "4px dashed #8545cf";
+  currentElement.style.outline = "4px dashed #FF5733"; // Enhanced visibility
   currentElement.style.borderRadius = "6px";
-  currentElement.style.cursor = "pointer"; // Change cursor to pointer
+  currentElement.style.cursor = "pointer";
 });
 
+// Remove highlight on mouseout
 document.addEventListener("mouseout", function (event) {
   if (!selecting || !currentElement) return;
 
-  // remove highlight
   currentElement.style.outline = "";
-  currentElement.style.cursor = ""; // Reset cursor style
+  currentElement.style.cursor = "";
   currentElement = null;
 });
 
-document.addEventListener("click", function (event) {
-  if (!selecting) return;
+// Consolidated click event listener in the capture phase
+document.addEventListener(
+  "click",
+  function (event) {
+    if (!selecting) return;
 
-  event.preventDefault();
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
 
-  let path = getPathTo(event.target);
-  chrome.runtime.sendMessage({ action: "selectedElement", path: path });
+    let path = getPathTo(event.target);
+    pathDisplay.innerText = path; // Display the CSS path in the "window"
 
-  return false;
-});
+    // Send the selected path to the background script or popup
+    chrome.runtime.sendMessage({ action: "selectedElement", path: path });
 
-// calculate CSS path function
+    // Stop the selection process
+    selecting = false;
+    hideOverlay();
+    if (currentElement) {
+      currentElement.style.outline = "";
+      currentElement.style.cursor = "";
+      currentElement = null;
+    }
+
+    // Show the selection window
+    elementSelectorWindow.style.display = "block";
+
+    // Update the extension's state
+    chrome.runtime.sendMessage({
+      action: "toggleSelect",
+      selecting: selecting,
+    });
+
+    return false;
+  },
+  true // Use capture phase
+);
+
+// Prevent keyboard interactions during selection
+document.addEventListener(
+  "keydown",
+  function (event) {
+    if (selecting) {
+      // Allow 'Escape' key to cancel selection
+      if (event.key === "Escape") {
+        selecting = false;
+        hideOverlay();
+        if (currentElement) {
+          currentElement.style.outline = "";
+          currentElement.style.cursor = "";
+          currentElement = null;
+        }
+        elementSelectorWindow.style.display = "none";
+        chrome.runtime.sendMessage({
+          action: "toggleSelect",
+          selecting: selecting,
+        });
+        createToast("Selection canceled.");
+      } else {
+        // Prevent other keys
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+      }
+    }
+  },
+  true // Use capture phase
+);
+
+// Function to calculate CSS path
 function getPathTo(element) {
   if (!(element instanceof Element)) return;
   const path = [];
 
   let node = element;
   while (node instanceof Element) {
-    element = node;
-    let selector = element.nodeName.toLowerCase();
-    if (element.id) {
-      // https://stackoverflow.com/a/51396346
-      // selector += "#" + element.id;
-      selector += `[id='${element.id}']`;
+    let selector = node.nodeName.toLowerCase();
+    if (node.id) {
+      selector += `[id='${node.id}']`;
       path.unshift(selector);
       break;
     } else {
-      let sib = element,
+      let sib = node,
         nth = 1;
       while ((sib = sib.previousElementSibling)) {
         if (sib.nodeName.toLowerCase() === selector) nth++;
       }
-      if (nth != 1) selector += ":nth-of-type(" + nth + ")";
+      if (nth != 1) selector += `:nth-of-type(${nth})`;
     }
     path.unshift(selector);
-    node = element.parentNode;
+    node = node.parentNode;
   }
   return path.join(" > ");
 }
-
-document.addEventListener("click", function (event) {
-  if (!selecting) return;
-
-  event.preventDefault();
-  event.stopPropagation();
-  event.stopImmediatePropagation();
-
-  let path = getPathTo(event.target);
-  chrome.runtime.sendMessage({ action: "selectedElement", path: path });
-
-  // stop the selection process
-  selecting = false;
-  if (currentElement) {
-    currentElement.style.outline = "";
-    currentElement.style.cursor = ""; // Reset cursor style
-    currentElement = null;
-  }
-
-  // Send a message back to popup.js to update the button status
-  chrome.runtime.sendMessage({ action: "toggleSelect", selecting: selecting });
-
-  return false;
-});
