@@ -1,6 +1,9 @@
+// contentScript.js
+
 let selecting = false;
 let currentElement = null;
 
+// Create and inject custom styles for the selector window and highlighted elements
 let style = document.createElement("style");
 style.innerHTML = `
   #element-selector-window * {
@@ -38,7 +41,6 @@ style.innerHTML = `
     font-size: 14px;
     color: #393939;
 }
-}
 
 #copyButton {
     font-family: Arial, sans-serif;
@@ -56,11 +58,10 @@ style.innerHTML = `
     text-align: center;
     
 }
-
 `;
 document.head.appendChild(style);
 
-// toast notification
+// Toast notification function
 function createToast(message) {
   const toast = document.createElement("div");
   toast.style.position = "fixed";
@@ -95,7 +96,7 @@ function createToast(message) {
   }, 3000);
 }
 
-// create a new div for our "window"
+// Create the element selector window
 let elementSelectorWindow = document.createElement("div");
 elementSelectorWindow.id = "element-selector-window";
 elementSelectorWindow.style.display = "none"; // start hidden
@@ -107,7 +108,7 @@ elementSelectorWindow.style.zIndex = 999999999; // ensure it's on top
 elementSelectorWindow.style.width = "450px";
 document.body.appendChild(elementSelectorWindow);
 
-// create a h3 title for our "window"
+// Create a h3 title for the window
 let title = document.createElement("h3");
 title.innerText = "Path Selected!";
 title.style.color = "rgb(107 87 153)";
@@ -119,7 +120,7 @@ title.style.fontSize = "17px";
 
 elementSelectorWindow.appendChild(title);
 
-// create a p subtitle for our "window"
+// Create a p subtitle for the window
 let subtitle = document.createElement("p");
 subtitle.innerText = "Please copy the path below.";
 subtitle.style.color = "rgb(135 135 135)";
@@ -130,11 +131,12 @@ subtitle.style.fontSize = "14px";
 subtitle.style.marginBottom = "15px";
 elementSelectorWindow.appendChild(subtitle);
 
-// create a p element for displaying the CSS path
+// Create a p element for displaying the CSS path
 let pathDisplay = document.createElement("p");
 elementSelectorWindow.appendChild(pathDisplay);
 pathDisplay.id = "pathDisplay";
 
+// Listen for messages to toggle selection mode
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.action === "toggleSelect") {
     selecting = request.selecting;
@@ -143,10 +145,34 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       currentElement.style.cursor = "";
       currentElement = null;
     }
+
+    // If selecting mode is activated, prevent default actions
+    if (selecting) {
+      document.addEventListener(
+        "click",
+        preventDefaultActions,
+        true // Capture phase
+      );
+    } else {
+      document.removeEventListener(
+        "click",
+        preventDefaultActions,
+        true // Capture phase
+      );
+    }
   }
 });
 
-// copy css path
+// Function to prevent default actions during selection mode
+function preventDefaultActions(event) {
+  if (!selecting) return;
+
+  event.preventDefault();
+  event.stopPropagation();
+  event.stopImmediatePropagation();
+}
+
+// Copy CSS path button
 let copyButton = document.createElement("button");
 copyButton.innerText = "Copy to Clipboard";
 copyButton.id = "copyButton";
@@ -187,13 +213,13 @@ copyButton.addEventListener("click", async function () {
 
 elementSelectorWindow.appendChild(copyButton);
 
-// create a close button for our "window"
+// Create a close button for the window
 let closeButton = document.createElement("button");
 closeButton.innerText = "Close"; // We'll use an image as the button icon
 closeButton.id = "closeButton"; // Add a CSS id for further modification
 closeButton.style.backgroundColor = "#cd004d"; // Red
 closeButton.style.border = "none"; // No border
-closeButton.style.borderRadius = "4px"; // Make it a perfect circle
+closeButton.style.borderRadius = "4px"; // Rounded corners
 closeButton.style.cursor = "pointer"; // Mouse cursor changes when hovering
 //closeButton.style.backgroundImage = 'url("close-icon.png")'; // Set the image as the background
 closeButton.style.backgroundSize = "contain"; // Ensure the image fits within the button
@@ -202,8 +228,6 @@ closeButton.style.backgroundPosition = "center"; // Center the background image
 closeButton.style.fontSize = "12px";
 closeButton.style.margin = "0px 2px";
 closeButton.style.float = "left";
-
-elementSelectorWindow.appendChild(closeButton);
 
 // Change color on hover
 closeButton.onmouseover = function () {
@@ -216,17 +240,24 @@ closeButton.onmouseout = function () {
 };
 
 closeButton.addEventListener("click", function () {
-  // stop selecting and hide the "window"
+  // Stop selecting and hide the window
   selecting = false;
   if (currentElement) {
     currentElement.style.outline = "";
     currentElement = null;
   }
   elementSelectorWindow.style.display = "none";
+
+  // Remove the event listener that prevents default actions
+  document.removeEventListener(
+    "click",
+    preventDefaultActions,
+    true // Capture phase
+  );
 });
 elementSelectorWindow.appendChild(closeButton);
 
-// create a footer for our "window"
+// Create a footer for the window
 let footer = document.createElement("footer");
 footer.innerHTML = "powered by samelogic &reg;<br>user intent as a service";
 footer.style.marginTop = "14px";
@@ -237,31 +268,11 @@ footer.style.fontFamily = "Arial, sans-serif";
 footer.style.float = "left";
 elementSelectorWindow.appendChild(footer);
 
-document.addEventListener("click", function (event) {
-  if (!selecting) return;
-
-  event.preventDefault();
-
-  let path = getPathTo(event.target);
-  pathDisplay.innerText = path; // display the CSS path in our "window"
-
-  // stop the selection process
-  selecting = false;
-  if (currentElement) {
-    currentElement.style.outline = "";
-    currentElement = null;
-  }
-
-  // show our "window"
-  elementSelectorWindow.style.display = "block";
-
-  return false;
-});
-
+// Handle mouseover event to highlight elements during selection
 document.addEventListener("mouseover", function (event) {
   if (!selecting) return;
 
-  // highlight the element
+  // Highlight the element
   if (currentElement) {
     currentElement.style.outline = "";
     currentElement.style.cursor = ""; // Reset cursor style
@@ -272,27 +283,59 @@ document.addEventListener("mouseover", function (event) {
   currentElement.style.cursor = "pointer"; // Change cursor to pointer
 });
 
+// Handle mouseout event to remove highlight
 document.addEventListener("mouseout", function (event) {
   if (!selecting || !currentElement) return;
 
-  // remove highlight
+  // Remove highlight
   currentElement.style.outline = "";
   currentElement.style.cursor = ""; // Reset cursor style
   currentElement = null;
 });
 
-document.addEventListener("click", function (event) {
-  if (!selecting) return;
+// Handle click event to select the element and get its CSS path
+document.addEventListener(
+  "click",
+  function (event) {
+    if (!selecting) return;
 
-  event.preventDefault();
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
 
-  let path = getPathTo(event.target);
-  chrome.runtime.sendMessage({ action: "selectedElement", path: path });
+    let path = getPathTo(event.target);
+    pathDisplay.innerText = path; // Display the CSS path in our window
 
-  return false;
-});
+    // Stop the selection process
+    selecting = false;
+    if (currentElement) {
+      currentElement.style.outline = "";
+      currentElement.style.cursor = ""; // Reset cursor style
+      currentElement = null;
+    }
 
-// calculate CSS path function
+    // Show our window
+    elementSelectorWindow.style.display = "block";
+
+    // Send a message back to popup.js to update the button status
+    chrome.runtime.sendMessage({
+      action: "toggleSelect",
+      selecting: selecting,
+    });
+
+    // Remove the event listener that prevents default actions
+    document.removeEventListener(
+      "click",
+      preventDefaultActions,
+      true // Capture phase
+    );
+
+    return false;
+  },
+  true // Use capture phase
+);
+
+// Function to calculate the unique CSS path to the element
 function getPathTo(element) {
   if (!(element instanceof Element)) return;
   const path = [];
@@ -302,8 +345,7 @@ function getPathTo(element) {
     element = node;
     let selector = element.nodeName.toLowerCase();
     if (element.id) {
-      // https://stackoverflow.com/a/51396346
-      // selector += "#" + element.id;
+      // Use the ID in the selector
       selector += `[id='${element.id}']`;
       path.unshift(selector);
       break;
@@ -320,27 +362,3 @@ function getPathTo(element) {
   }
   return path.join(" > ");
 }
-
-document.addEventListener("click", function (event) {
-  if (!selecting) return;
-
-  event.preventDefault();
-  event.stopPropagation();
-  event.stopImmediatePropagation();
-
-  let path = getPathTo(event.target);
-  chrome.runtime.sendMessage({ action: "selectedElement", path: path });
-
-  // stop the selection process
-  selecting = false;
-  if (currentElement) {
-    currentElement.style.outline = "";
-    currentElement.style.cursor = ""; // Reset cursor style
-    currentElement = null;
-  }
-
-  // Send a message back to popup.js to update the button status
-  chrome.runtime.sendMessage({ action: "toggleSelect", selecting: selecting });
-
-  return false;
-});
