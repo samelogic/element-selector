@@ -6,9 +6,10 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            width: 220px;
+            width: 300px;
             padding: 10px;
             box-sizing: border-box;
+            background-color: #f4f4f4;
         }
 
         #instructions {
@@ -18,7 +19,9 @@
         }
 
         #toggle-select,
-        #advisory {
+        #advisory,
+        #copy-path,
+        #close-popup {
             width: 100%;
             padding: 10px;
             margin: 5px 0;
@@ -34,15 +37,46 @@
             color: white;
         }
 
+        #toggle-select.active {
+            background-color: #cd004d;
+            /* Active state color */
+        }
+
         #advisory {
             background-color: #4CAF50;
             /* Green color */
             color: white;
         }
 
-        #toggle-select.active {
-            background-color: #cd004d;
-            /* Active state color */
+        #copy-path {
+            background-color: #007BFF;
+            /* Blue color */
+            color: white;
+            display: none;
+            /* Hidden by default */
+        }
+
+        #close-popup {
+            background-color: #f44336;
+            /* Red color */
+            color: white;
+            display: none;
+            /* Hidden by default */
+        }
+
+        #css-path-container {
+            display: none;
+            margin-top: 10px;
+        }
+
+        #css-path {
+            width: 100%;
+            height: 80px;
+            resize: none;
+            padding: 5px;
+            box-sizing: border-box;
+            font-family: monospace;
+            font-size: 12px;
         }
     </style>
 </head>
@@ -52,8 +86,15 @@
         Click "Select an Element" to start selecting elements on the page. Press "Escape" or click "Stop Selecting" to
         cancel.
     </div>
-    <button id="toggle-select">Select an Element</button>
-    <button id="advisory">Advisory</button>
+    <button id="toggle-select" aria-label="Select an Element">Select an Element</button>
+    <button id="advisory" aria-label="Advisory">Advisory</button>
+
+    <div id="css-path-container">
+        <textarea id="css-path" readonly aria-label="CSS Path"></textarea>
+        <button id="copy-path" aria-label="Copy CSS Path to Clipboard">Copy to Clipboard</button>
+        <button id="close-popup" aria-label="Close Popup">Close</button>
+    </div>
+
     <script src="popup.js"></script>
 </body>
 
