@@ -2,6 +2,8 @@
 
 let selecting = false;
 let currentElement = null;
+let selectionOverlay = null;
+let selectionMessage = null;
 
 // Create and inject custom styles for the selector window and highlighted elements
 let style = document.createElement("style");
@@ -18,17 +20,17 @@ style.innerHTML = `
     right: 10px;
     padding: 10px;
     background-color: #f4f4f4;
-    // border: 2px solid #8545CF;
+    /* border: 2px solid #8545CF; */
     z-index: 999999999;
     position: relative;
-    border-radius: 8px;  // adjust to your preference
-    overflow: hidden;  // clip the border gradient to match border radius
-    box-shadow: 0px 2px 15px 11px rgba(0,0,0,0.3);
-   
+    border-radius: 8px;  /* adjust to your preference */
+    overflow: hidden;  /* clip the border gradient to match border radius */
+    box-shadow: 0px 2px 15px 15px rgba(0,0,0,0.1);
+    border: 1px solid #e0e0e0;
   }
 
-#pathDisplay {
- font-family: monospace;
+  #pathDisplay {
+    font-family: monospace;
     padding: 10px;
     background-color: #cecece;
     float: left;
@@ -40,15 +42,15 @@ style.innerHTML = `
     overflow-wrap: break-word;
     font-size: 14px;
     color: #393939;
-}
+  }
 
-#copyButton {
+  #copyButton {
     font-family: Arial, sans-serif;
     float: left;
     font-weight: bold;
-}
+  }
 
-#closeButton {
+  #closeButton {
     font-family: Arial, sans-serif;
     font-weight: bold;
     color: #ffffff;
@@ -56,8 +58,38 @@ style.innerHTML = `
     width: 74px;
     padding: 15px 0px;
     text-align: center;
-    
-}
+  }
+
+  /* Styles for the selection overlay and message */
+  #selection-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999999998; /* Below the selector window and message */
+    pointer-events: none; /* Allow interactions with underlying elements */
+    box-sizing: border-box;
+    border: 5px solid #40c057;
+  }
+
+  #selection-message {
+    position: fixed;
+    font-weight: bold;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 5px 10px;
+    background-color: #40c057;
+    border: 1px solid #53ad63;
+    color: white;
+    border-radius: 60px; /* Pill shape */
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    z-index: 999999999; /* On top */
+    opacity: 0.96;
+    box-shadow: -1px 6px 5px 1px rgba(0, 0, 0, 0.1);
+  }
 `;
 document.head.appendChild(style);
 
@@ -133,44 +165,8 @@ elementSelectorWindow.appendChild(subtitle);
 
 // Create a p element for displaying the CSS path
 let pathDisplay = document.createElement("p");
-elementSelectorWindow.appendChild(pathDisplay);
 pathDisplay.id = "pathDisplay";
-
-// Listen for messages to toggle selection mode
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  if (request.action === "toggleSelect") {
-    selecting = request.selecting;
-    if (!selecting && currentElement) {
-      currentElement.style.outline = "";
-      currentElement.style.cursor = "";
-      currentElement = null;
-    }
-
-    // If selecting mode is activated, prevent default actions
-    if (selecting) {
-      document.addEventListener(
-        "click",
-        preventDefaultActions,
-        true // Capture phase
-      );
-    } else {
-      document.removeEventListener(
-        "click",
-        preventDefaultActions,
-        true // Capture phase
-      );
-    }
-  }
-});
-
-// Function to prevent default actions during selection mode
-function preventDefaultActions(event) {
-  if (!selecting) return;
-
-  event.preventDefault();
-  event.stopPropagation();
-  event.stopImmediatePropagation();
-}
+elementSelectorWindow.appendChild(pathDisplay);
 
 // Copy CSS path button
 let copyButton = document.createElement("button");
@@ -248,6 +244,9 @@ closeButton.addEventListener("click", function () {
   }
   elementSelectorWindow.style.display = "none";
 
+  // Remove the overlay and message if they exist
+  removeSelectionOverlay();
+
   // Remove the event listener that prevents default actions
   document.removeEventListener(
     "click",
@@ -267,6 +266,75 @@ footer.style.color = "rgba(55, 53, 47, 0.7)";
 footer.style.fontFamily = "Arial, sans-serif";
 footer.style.float = "left";
 elementSelectorWindow.appendChild(footer);
+
+// Function to prevent default actions during selection mode
+function preventDefaultActions(event) {
+  if (!selecting) return;
+
+  event.preventDefault();
+  event.stopPropagation();
+  event.stopImmediatePropagation();
+}
+
+// Listen for messages to toggle selection mode
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  if (request.action === "toggleSelect") {
+    selecting = request.selecting;
+    if (selecting) {
+      // Create and show the overlay and message
+      createSelectionOverlay();
+
+      // Add event listeners to prevent default actions during selection
+      document.addEventListener(
+        "click",
+        preventDefaultActions,
+        true // Capture phase
+      );
+    } else {
+      // Remove overlay and message
+      removeSelectionOverlay();
+
+      if (currentElement) {
+        currentElement.style.outline = "";
+        currentElement.style.cursor = "";
+        currentElement = null;
+      }
+
+      // Remove event listener
+      document.removeEventListener(
+        "click",
+        preventDefaultActions,
+        true // Capture phase
+      );
+    }
+  }
+});
+
+// Function to create the selection overlay and message
+function createSelectionOverlay() {
+  // Create overlay
+  selectionOverlay = document.createElement("div");
+  selectionOverlay.id = "selection-overlay";
+  document.body.appendChild(selectionOverlay);
+
+  // Create message
+  selectionMessage = document.createElement("div");
+  selectionMessage.id = "selection-message";
+  selectionMessage.innerText = "Click Any Element To Copy Its Selector";
+  document.body.appendChild(selectionMessage);
+}
+
+// Function to remove the selection overlay and message
+function removeSelectionOverlay() {
+  if (selectionOverlay) {
+    selectionOverlay.remove();
+    selectionOverlay = null;
+  }
+  if (selectionMessage) {
+    selectionMessage.remove();
+    selectionMessage = null;
+  }
+}
 
 // Handle mouseover event to highlight elements during selection
 document.addEventListener("mouseover", function (event) {
@@ -313,6 +381,9 @@ document.addEventListener(
       currentElement.style.cursor = ""; // Reset cursor style
       currentElement = null;
     }
+
+    // Remove the overlay and message
+    removeSelectionOverlay();
 
     // Show our window
     elementSelectorWindow.style.display = "block";
