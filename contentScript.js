@@ -69,7 +69,7 @@ style.innerHTML = `
     z-index: 999999998; /* Below the selector window and message */
     pointer-events: none; /* Allow interactions with underlying elements */
     box-sizing: border-box;
-    border: 5px solid ##3a933a;
+    border: 5px solid #3a933a;
   }
 
   #selection-message {
@@ -79,7 +79,7 @@ style.innerHTML = `
     left: 50%;
     transform: translateX(-50%);
     padding: 5px 10px;
-    background-color: ##3a933a;
+    background-color: #3a933a;
     color: white;
     border-radius: 60px; /* Pill shape */
     font-family: Arial, sans-serif;
