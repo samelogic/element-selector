@@ -25,7 +25,8 @@ style.innerHTML = `
     position: relative;
     border-radius: 8px;  /* adjust to your preference */
     overflow: hidden;  /* clip the border gradient to match border radius */
-    box-shadow: 0px 2px 15px 11px rgba(0,0,0,0.3);
+    box-shadow: 0px 2px 15px 15px rgba(0,0,0,0.1);
+    border: 1px solid #e0e0e0;
   }
 
   #pathDisplay {
@@ -319,7 +320,7 @@ function createSelectionOverlay() {
   // Create message
   selectionMessage = document.createElement("div");
   selectionMessage.id = "selection-message";
-  selectionMessage.innerText = "Select Any Element";
+  selectionMessage.innerText = "Click Any Element To Copy Its Selector";
   document.body.appendChild(selectionMessage);
 }
 
