@@ -1,8 +1,10 @@
 {
   "manifest_version": 3,
   "name": "Copy CSS Selector",
-  "version": "1.3.4",
-  "description": "The CSS Path Selector is a tool to locate web elements easily. Useful for designers, developers, and researchers in web projects.",
+  "version": "1.3.5",
+  "description": "Copy CSS Selector is a tool to locate web elements easily. Useful for designers, developers, and researchers in web projects.",
+  "author": "Samelogic",
+  "homepage_url": "https://samelogic.com",
   "background": {
     "service_worker": "background.js"
   },
