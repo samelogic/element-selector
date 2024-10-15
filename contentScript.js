@@ -259,15 +259,6 @@ elementSelectorWindow.appendChild(closeButton);
 // Add the "Select Another Element" button
 let reselectButton = document.createElement("button");
 reselectButton.innerHTML = `
-  <svg 
-    xmlns="http://www.w3.org/2000/svg" 
-    height="16" 
-    width="16" 
-    viewBox="0 0 24 24" 
-    fill="currentColor" 
-    style="margin-right: 8px;">
-    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-  </svg>
   Select Another Element
 `;
 reselectButton.id = "reselectButton";
@@ -279,13 +270,14 @@ reselectButton.style.textAlign = "center";
 reselectButton.style.textDecoration = "none";
 reselectButton.style.display = "flex";
 reselectButton.style.alignItems = "center";
-reselectButton.style.fontSize = "12px";
-reselectButton.style.margin = "10px 2px";
+reselectButton.style.fontSize = "11px";
+reselectButton.style.margin = "4px 2px";
 reselectButton.style.cursor = "pointer";
 reselectButton.style.borderRadius = "4px";
 reselectButton.style.float = "left";
 reselectButton.style.fontFamily = "Arial, sans-serif";
 reselectButton.style.fontWeight = "bold";
+reselectButton.style.gap = "8px"; // Ensure consistent spacing between icon and text
 
 // Change color on hover
 reselectButton.onmouseover = function () {
@@ -305,7 +297,7 @@ reselectButton.addEventListener("click", function () {
   elementSelectorWindow.style.display = "none";
 
   // Create a toast notification
-  createToast("Selection mode relaunched. Select an element.");
+  createToast("Select an element.");
 });
 
 elementSelectorWindow.appendChild(reselectButton);
