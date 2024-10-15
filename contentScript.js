@@ -256,6 +256,60 @@ closeButton.addEventListener("click", function () {
 });
 elementSelectorWindow.appendChild(closeButton);
 
+// Add the "Select Another Element" button
+let reselectButton = document.createElement("button");
+reselectButton.innerHTML = `
+  <svg 
+    xmlns="http://www.w3.org/2000/svg" 
+    height="16" 
+    width="16" 
+    viewBox="0 0 24 24" 
+    fill="currentColor" 
+    style="margin-right: 8px;">
+    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+  </svg>
+  Select Another Element
+`;
+reselectButton.id = "reselectButton";
+reselectButton.style.backgroundColor = "#40c057";
+reselectButton.style.color = "white";
+reselectButton.style.border = "none";
+reselectButton.style.padding = "10px 20px";
+reselectButton.style.textAlign = "center";
+reselectButton.style.textDecoration = "none";
+reselectButton.style.display = "flex";
+reselectButton.style.alignItems = "center";
+reselectButton.style.fontSize = "12px";
+reselectButton.style.margin = "10px 2px";
+reselectButton.style.cursor = "pointer";
+reselectButton.style.borderRadius = "4px";
+reselectButton.style.float = "left";
+reselectButton.style.fontFamily = "Arial, sans-serif";
+reselectButton.style.fontWeight = "bold";
+
+// Change color on hover
+reselectButton.onmouseover = function () {
+  reselectButton.style.backgroundColor = "#28a745";
+};
+
+reselectButton.onmouseout = function () {
+  reselectButton.style.backgroundColor = "#40c057";
+};
+
+// Event listener to relaunch selection mode
+reselectButton.addEventListener("click", function () {
+  // Directly toggle selection mode without sending a message
+  toggleSelectionMode(true);
+
+  // Hide the element selector window
+  elementSelectorWindow.style.display = "none";
+
+  // Create a toast notification
+  createToast("Selection mode relaunched. Select an element.");
+});
+
+elementSelectorWindow.appendChild(reselectButton);
+
 // Create a footer for the window
 let footer = document.createElement("footer");
 footer.innerHTML = "powered by samelogic &reg;<br>user intent as a service";
@@ -276,37 +330,34 @@ function preventDefaultActions(event) {
   event.stopImmediatePropagation();
 }
 
-// Listen for messages to toggle selection mode
+// Add a function to toggle selection mode
+function toggleSelectionMode(isSelecting) {
+  selecting = isSelecting;
+  if (selecting) {
+    // Create and show the overlay and message
+    createSelectionOverlay();
+
+    // Add event listeners to prevent default actions during selection
+    document.addEventListener("click", preventDefaultActions, true);
+  } else {
+    // Remove overlay and message
+    removeSelectionOverlay();
+
+    if (currentElement) {
+      currentElement.style.outline = "";
+      currentElement.style.cursor = "";
+      currentElement = null;
+    }
+
+    // Remove event listener
+    document.removeEventListener("click", preventDefaultActions, true);
+  }
+}
+
+// Modify the message listener to use the new toggle function
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.action === "toggleSelect") {
-    selecting = request.selecting;
-    if (selecting) {
-      // Create and show the overlay and message
-      createSelectionOverlay();
-
-      // Add event listeners to prevent default actions during selection
-      document.addEventListener(
-        "click",
-        preventDefaultActions,
-        true // Capture phase
-      );
-    } else {
-      // Remove overlay and message
-      removeSelectionOverlay();
-
-      if (currentElement) {
-        currentElement.style.outline = "";
-        currentElement.style.cursor = "";
-        currentElement = null;
-      }
-
-      // Remove event listener
-      document.removeEventListener(
-        "click",
-        preventDefaultActions,
-        true // Capture phase
-      );
-    }
+    toggleSelectionMode(request.selecting);
   }
 });
 
