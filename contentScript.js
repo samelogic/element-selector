@@ -89,6 +89,16 @@ style.innerHTML = `
     z-index: 999999999; /* On top */
     opacity: 0.96;
     box-shadow: -1px 6px 5px 1px rgba(0, 0, 0, 0.1);
+    user-select: none; /* Prevent text selection */
+    pointer-events: auto; /* Enable pointer events initially */
+    transition: opacity 0.3s ease, visibility 0.3s ease; /* Smoother transition */
+  }
+
+  /* Fade out the selection message when the cursor is near */
+  #selection-message.fade-out {
+    opacity: 0;
+    visibility: hidden; /* Hide the element after fading */
+    pointer-events: none; /* Disable pointer events during and after fade */
   }
 `;
 document.head.appendChild(style);
@@ -475,4 +485,44 @@ function getPathTo(element) {
     node = element.parentNode;
   }
   return path.join(" > ");
+}
+
+// Add event listener to handle cursor proximity to the selection message
+document.addEventListener("mousemove", handleMouseMove);
+
+function handleMouseMove(event) {
+  if (!selectionMessage) return;
+
+  const messageRect = selectionMessage.getBoundingClientRect();
+  const cursorX = event.clientX;
+  const cursorY = event.clientY;
+  const proximity = 50; // Distance in pixels to trigger fade out
+
+  // Calculate the distance between the cursor and the center of the selection message
+  const messageCenterX = messageRect.left + messageRect.width / 2;
+  const messageCenterY = messageRect.top + messageRect.height / 2;
+  const distance = Math.hypot(
+    cursorX - messageCenterX,
+    cursorY - messageCenterY
+  );
+
+  if (distance < proximity) {
+    // Add the fade-out class if not already added
+    if (!selectionMessage.classList.contains("fade-out")) {
+      selectionMessage.classList.add("fade-out");
+
+      // Optionally hide the message after the transition
+      setTimeout(() => {
+        if (selectionMessage) {
+          selectionMessage.style.display = "none";
+        }
+      }, 300); // Match the transition duration
+    }
+  } else {
+    // Remove the fade-out class if the cursor moves away
+    if (selectionMessage.classList.contains("fade-out")) {
+      selectionMessage.classList.remove("fade-out");
+      selectionMessage.style.display = "block";
+    }
+  }
 }
