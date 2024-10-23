@@ -488,8 +488,10 @@ document.addEventListener(
     intentButton.style.borderRadius = "60px";
     intentButton.style.cursor = "pointer";
     intentButton.style.zIndex = "1000000000"; // Ensure it's on top
-    intentButton.style.boxShadow = "0px 2px 8px rgba(0, 0, 0, 0.2)"; // Add subtle shadow
-    intentButton.style.fontWeight = "bold";
+    intentButton.style.boxShadow = "0px 2px 8px rgba(141, 70, 255, 0.2)"; // Add subtle shadow
+    intentButton.style.fontWeight = "600";
+    intentButton.style.fontFamily = "Arial, sans-serif";
+    intentButton.style.fontSize = "12px";
 
     // Position the button above the selected element
     const rect = event.target.getBoundingClientRect();
