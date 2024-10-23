@@ -263,6 +263,12 @@ closeButton.addEventListener("click", function () {
     preventDefaultActions,
     true // Capture phase
   );
+
+  // Remove the intentButton
+  if (window.intentButton) {
+    window.intentButton.remove();
+    window.intentButton = null;
+  }
 });
 elementSelectorWindow.appendChild(closeButton);
 
@@ -308,6 +314,12 @@ reselectButton.addEventListener("click", function () {
 
   // Create a toast notification
   createToast("Select an element.");
+
+  // Remove the intentButton
+  if (window.intentButton) {
+    window.intentButton.remove();
+    window.intentButton = null;
+  }
 });
 
 elementSelectorWindow.appendChild(reselectButton);
@@ -353,6 +365,12 @@ function toggleSelectionMode(isSelecting) {
 
     // Remove event listener
     document.removeEventListener("click", preventDefaultActions, true);
+
+    // Remove the intentButton if it exists
+    if (window.intentButton) {
+      window.intentButton.remove();
+      window.intentButton = null;
+    }
   }
 }
 
@@ -360,6 +378,11 @@ function toggleSelectionMode(isSelecting) {
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.action === "toggleSelect") {
     toggleSelectionMode(request.selecting);
+
+    if (!request.selecting && window.intentButton) {
+      window.intentButton.remove();
+      window.intentButton = null;
+    }
   }
 });
 
@@ -453,6 +476,39 @@ document.addEventListener(
       preventDefaultActions,
       true // Capture phase
     );
+
+    // Create the small clickable element above the selected element
+    const intentButton = document.createElement("div");
+    intentButton.id = "intent-button"; // Assign an ID for easy reference
+    intentButton.innerText = "Get Micro Feedback On This";
+    intentButton.style.position = "absolute";
+    intentButton.style.backgroundColor = "#4206ba"; // Example background color
+    intentButton.style.color = "#ffffff";
+    intentButton.style.padding = "10px 15px";
+    intentButton.style.borderRadius = "60px";
+    intentButton.style.cursor = "pointer";
+    intentButton.style.zIndex = "1000000000"; // Ensure it's on top
+    intentButton.style.boxShadow = "0px 2px 8px rgba(0, 0, 0, 0.2)"; // Add subtle shadow
+    intentButton.style.fontWeight = "bold";
+
+    // Position the button above the selected element
+    const rect = event.target.getBoundingClientRect();
+    intentButton.style.left = `${rect.left + window.scrollX}px`;
+    intentButton.style.top = `${rect.top + window.scrollY - 50}px`; // 30px above
+
+    // Add click event listener for intentButton
+    intentButton.addEventListener("click", function () {
+      // Implement the logic to measure customer intent
+      // For example, send a message to background script or popup
+      console.log("Intent measurement triggered for:", event.target);
+      // Add further implementation as needed
+    });
+
+    // Append the intentButton to the body
+    document.body.appendChild(intentButton);
+
+    // Store a reference to the intentButton for later removal
+    window.intentButton = intentButton;
 
     return false;
   },
