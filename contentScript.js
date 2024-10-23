@@ -314,7 +314,7 @@ elementSelectorWindow.appendChild(reselectButton);
 
 // Create a footer for the window
 let footer = document.createElement("footer");
-footer.innerHTML = "powered by samelogic &reg;<br>user intent as a service";
+footer.innerHTML = "powered by samelogic &reg;<br>customer intent as a service";
 footer.style.marginTop = "14px";
 footer.style.marginLeft = "3px";
 footer.style.fontSize = "10px";
