@@ -109,6 +109,11 @@ style.innerHTML = `
     50% { transform: translateY(-3px); }
     100% { transform: translateY(0px); }
   }
+
+  /* Add hover effect for intentButton */
+  #intent-button:hover {
+    filter: brightness(0.8);
+  }
 `;
 document.head.appendChild(style);
 
