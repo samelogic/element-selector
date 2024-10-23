@@ -103,6 +103,12 @@ style.innerHTML = `
     visibility: hidden; /* Hide the element after fading */
     pointer-events: none; /* Disable pointer events during and after fade */
   }
+
+  @keyframes bounce {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-3px); }
+    100% { transform: translateY(0px); }
+  }
 `;
 document.head.appendChild(style);
 
@@ -488,7 +494,7 @@ document.addEventListener(
 
     // Create the small clickable element above the selected element
     const intentButton = document.createElement("div");
-    intentButton.title = "Open Samelogic to analyze this selector";
+    intentButton.title = "Ask a quick question when users pause here";
     intentButton.id = "intent-button"; // Assign an ID for easy reference
     intentButton.innerText = "Survey users who hover here";
     intentButton.style.position = "absolute";
@@ -498,12 +504,14 @@ document.addEventListener(
     intentButton.style.borderRadius = "60px";
     intentButton.style.cursor = "pointer";
     intentButton.style.zIndex = "1000000000"; // Ensure it's on top
-    intentButton.style.boxShadow = "0px 2px 8px rgba(141, 70, 255, 0.2)"; // Add subtle shadow
+    intentButton.style.boxShadow = "0px 2px 8px rgba(141, 70, 255, 0.3)"; // Add subtle shadow
     intentButton.style.fontWeight = "600";
     intentButton.style.fontFamily = "Arial, sans-serif";
     intentButton.style.fontSize = "12px";
     intentButton.style.opacity = "0"; // Start invisible
     intentButton.style.transition = "opacity 0.3s ease"; // Fade transition
+    intentButton.style.animation = "bounce 3s ease-in-out infinite"; // Add bounce animation
+    intentButton.style.border = "1px solid #521eba";
 
     // Position the button above the selected element
     const rect = event.target.getBoundingClientRect();
