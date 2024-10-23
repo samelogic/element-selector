@@ -5,6 +5,9 @@ let currentElement = null;
 let selectionOverlay = null;
 let selectionMessage = null;
 
+// Add this line at the top of contentScript.js to define lastTabCreated
+let lastTabCreated = 0;
+
 // Create and inject custom styles for the selector window and highlighted elements
 let style = document.createElement("style");
 style.innerHTML = `
@@ -479,8 +482,9 @@ document.addEventListener(
 
     // Create the small clickable element above the selected element
     const intentButton = document.createElement("div");
+    intentButton.title = "Open Samelogic to analyze this selector";
     intentButton.id = "intent-button"; // Assign an ID for easy reference
-    intentButton.innerText = "Get Micro Feedback On This";
+    intentButton.innerText = "Survey users who hover here";
     intentButton.style.position = "absolute";
     intentButton.style.backgroundColor = "#4206ba"; // Example background color
     intentButton.style.color = "#ffffff";
@@ -500,10 +504,16 @@ document.addEventListener(
 
     // Add click event listener for intentButton
     intentButton.addEventListener("click", function () {
-      // Implement the logic to measure customer intent
-      // For example, send a message to background script or popup
-      console.log("Intent measurement triggered for:", event.target);
-      // Add further implementation as needed
+      const now = Date.now();
+      if (now - lastTabCreated < 1000) return; // 1 second cooldown
+      lastTabCreated = now;
+
+      const cssSelector = encodeURIComponent(pathDisplay.innerText);
+      // Send message to background script instead of directly creating tab
+      chrome.runtime.sendMessage({
+        action: "createTab",
+        url: `https://samelogic.com?ref=selector_${cssSelector}`,
+      });
     });
 
     // Append the intentButton to the body
