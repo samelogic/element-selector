@@ -269,8 +269,11 @@ closeButton.addEventListener("click", function () {
 
   // Remove the intentButton
   if (window.intentButton) {
-    window.intentButton.remove();
-    window.intentButton = null;
+    window.intentButton.style.opacity = "0"; // Start fade-out
+    setTimeout(() => {
+      window.intentButton.remove();
+      window.intentButton = null;
+    }, 300); // Match the transition duration
   }
 });
 elementSelectorWindow.appendChild(closeButton);
@@ -320,8 +323,11 @@ reselectButton.addEventListener("click", function () {
 
   // Remove the intentButton
   if (window.intentButton) {
-    window.intentButton.remove();
-    window.intentButton = null;
+    window.intentButton.style.opacity = "0"; // Start fade-out
+    setTimeout(() => {
+      window.intentButton.remove();
+      window.intentButton = null;
+    }, 300); // Match the transition duration
   }
 });
 
@@ -496,6 +502,8 @@ document.addEventListener(
     intentButton.style.fontWeight = "600";
     intentButton.style.fontFamily = "Arial, sans-serif";
     intentButton.style.fontSize = "12px";
+    intentButton.style.opacity = "0"; // Start invisible
+    intentButton.style.transition = "opacity 0.3s ease"; // Fade transition
 
     // Position the button above the selected element
     const rect = event.target.getBoundingClientRect();
@@ -518,6 +526,11 @@ document.addEventListener(
 
     // Append the intentButton to the body
     document.body.appendChild(intentButton);
+
+    // Trigger fade-in
+    requestAnimationFrame(() => {
+      intentButton.style.opacity = "1";
+    });
 
     // Store a reference to the intentButton for later removal
     window.intentButton = intentButton;
