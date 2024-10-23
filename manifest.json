@@ -8,7 +8,7 @@
   "background": {
     "service_worker": "background.js"
   },
-  "permissions": ["activeTab", "clipboardWrite"],
+  "permissions": ["tabs", "activeTab", "scripting", "clipboardWrite"],
 
   "action": {
     "default_popup": "popup.html",
@@ -26,5 +26,8 @@
     "16": "icon16.png",
     "48": "icon48.png",
     "128": "icon128.png"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
   }
 }
