@@ -103,6 +103,42 @@ style.innerHTML = `
     visibility: hidden; /* Hide the element after fading */
     pointer-events: none; /* Disable pointer events during and after fade */
   }
+
+  @keyframes bounce {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-3px); }
+    100% { transform: translateY(0px); }
+  }
+
+  /* Add hover effect for intentButton */
+  #intent-button:hover {
+    filter: brightness(0.8);
+  }
+
+  /* Tooltip styles */
+  #intent-button-tooltip {
+    position: absolute;
+    bottom: 120%; /* Position above the button */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.75);
+    color: #ffffff;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 10px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease-in-out;
+    pointer-events: none;
+    z-index: 1000000001; /* Above the intentButton */
+  }
+
+  /* Show tooltip on hover */
+  #intent-button:hover #intent-button-tooltip {
+    opacity: 1;
+    visibility: visible;
+  }
 `;
 document.head.appendChild(style);
 
@@ -269,8 +305,11 @@ closeButton.addEventListener("click", function () {
 
   // Remove the intentButton
   if (window.intentButton) {
-    window.intentButton.remove();
-    window.intentButton = null;
+    window.intentButton.style.opacity = "0"; // Start fade-out
+    setTimeout(() => {
+      window.intentButton.remove();
+      window.intentButton = null;
+    }, 300); // Match the transition duration
   }
 });
 elementSelectorWindow.appendChild(closeButton);
@@ -320,8 +359,11 @@ reselectButton.addEventListener("click", function () {
 
   // Remove the intentButton
   if (window.intentButton) {
-    window.intentButton.remove();
-    window.intentButton = null;
+    window.intentButton.style.opacity = "0"; // Start fade-out
+    setTimeout(() => {
+      window.intentButton.remove();
+      window.intentButton = null;
+    }, 300); // Match the transition duration
   }
 });
 
@@ -482,7 +524,7 @@ document.addEventListener(
 
     // Create the small clickable element above the selected element
     const intentButton = document.createElement("div");
-    intentButton.title = "Open Samelogic to analyze this selector";
+    // intentButton.title = "Ask a quick question when users pause here";
     intentButton.id = "intent-button"; // Assign an ID for easy reference
     intentButton.innerText = "Survey users who hover here";
     intentButton.style.position = "absolute";
@@ -492,10 +534,21 @@ document.addEventListener(
     intentButton.style.borderRadius = "60px";
     intentButton.style.cursor = "pointer";
     intentButton.style.zIndex = "1000000000"; // Ensure it's on top
-    intentButton.style.boxShadow = "0px 2px 8px rgba(141, 70, 255, 0.2)"; // Add subtle shadow
+    intentButton.style.boxShadow = "0px 2px 8px rgba(141, 70, 255, 0.3)"; // Add subtle shadow
     intentButton.style.fontWeight = "600";
     intentButton.style.fontFamily = "Arial, sans-serif";
     intentButton.style.fontSize = "12px";
+    intentButton.style.opacity = "0"; // Start invisible
+    intentButton.style.transition = "opacity 0.3s ease"; // Fade transition
+    intentButton.style.animation = "bounce 3s ease-in-out infinite"; // Add bounce animation
+    intentButton.style.border = "1px solid #521eba";
+
+    // Create tooltip element
+    const tooltip = document.createElement("div");
+    tooltip.id = "intent-button-tooltip";
+    tooltip.innerText = "Ask a quick question when users pause here";
+    intentButton.appendChild(tooltip);
+    tooltip.style.opacity = "1";
 
     // Position the button above the selected element
     const rect = event.target.getBoundingClientRect();
@@ -518,6 +571,11 @@ document.addEventListener(
 
     // Append the intentButton to the body
     document.body.appendChild(intentButton);
+
+    // Trigger fade-in
+    requestAnimationFrame(() => {
+      intentButton.style.opacity = "1";
+    });
 
     // Store a reference to the intentButton for later removal
     window.intentButton = intentButton;
