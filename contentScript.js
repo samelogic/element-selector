@@ -114,6 +114,31 @@ style.innerHTML = `
   #intent-button:hover {
     filter: brightness(0.8);
   }
+
+  /* Tooltip styles */
+  #intent-button-tooltip {
+    position: absolute;
+    bottom: 120%; /* Position above the button */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.75);
+    color: #ffffff;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 10px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease-in-out;
+    pointer-events: none;
+    z-index: 1000000001; /* Above the intentButton */
+  }
+
+  /* Show tooltip on hover */
+  #intent-button:hover #intent-button-tooltip {
+    opacity: 1;
+    visibility: visible;
+  }
 `;
 document.head.appendChild(style);
 
@@ -499,7 +524,7 @@ document.addEventListener(
 
     // Create the small clickable element above the selected element
     const intentButton = document.createElement("div");
-    intentButton.title = "Ask a quick question when users pause here";
+    // intentButton.title = "Ask a quick question when users pause here";
     intentButton.id = "intent-button"; // Assign an ID for easy reference
     intentButton.innerText = "Survey users who hover here";
     intentButton.style.position = "absolute";
@@ -517,6 +542,13 @@ document.addEventListener(
     intentButton.style.transition = "opacity 0.3s ease"; // Fade transition
     intentButton.style.animation = "bounce 3s ease-in-out infinite"; // Add bounce animation
     intentButton.style.border = "1px solid #521eba";
+
+    // Create tooltip element
+    const tooltip = document.createElement("div");
+    tooltip.id = "intent-button-tooltip";
+    tooltip.innerText = "Ask a quick question when users pause here";
+    intentButton.appendChild(tooltip);
+    tooltip.style.opacity = "1";
 
     // Position the button above the selected element
     const rect = event.target.getBoundingClientRect();
