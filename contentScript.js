@@ -139,6 +139,19 @@ style.innerHTML = `
     opacity: 1;
     visibility: visible;
   }
+
+  .parent-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative; /* Ensure positioning context */
+    height: 100vh; /* Adjust as needed */
+    width: 100%; /* Adjust as needed */
+  }
+
+  #intent-button {
+    /* Existing styles */
+  }
 `;
 document.head.appendChild(style);
 
@@ -371,7 +384,8 @@ elementSelectorWindow.appendChild(reselectButton);
 
 // Create a footer for the window
 let footer = document.createElement("footer");
-footer.innerHTML = "powered by samelogic &reg;<br>customer intent as a service";
+footer.innerHTML =
+  "Powered by Samelogic &reg;<br>The Fastest Way to Understand Customer Intent";
 footer.style.marginTop = "14px";
 footer.style.marginLeft = "3px";
 footer.style.fontSize = "10px";
@@ -543,6 +557,18 @@ document.addEventListener(
     intentButton.style.animation = "bounce 3s ease-in-out infinite"; // Add bounce animation
     intentButton.style.border = "1px solid #521eba";
 
+    // Ensure the parent element is positioned relative
+    const parentElement = document.body; // Replace with your actual parent element if different
+    parentElement.style.position = "relative";
+
+    // Center the button horizontally and vertically within the parent
+    intentButton.style.top = "50%";
+    intentButton.style.left = "50%";
+    intentButton.style.transform = "translate(-50%, -50%)";
+
+    // Append the intent button to the parent element
+    parentElement.appendChild(intentButton);
+
     // Create tooltip element
     const tooltip = document.createElement("div");
     tooltip.id = "intent-button-tooltip";
@@ -568,9 +594,6 @@ document.addEventListener(
         url: `https://samelogic.com?ref=selector_${cssSelector}`,
       });
     });
-
-    // Append the intentButton to the body
-    document.body.appendChild(intentButton);
 
     // Trigger fade-in
     requestAnimationFrame(() => {
